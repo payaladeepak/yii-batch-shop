@@ -1,0 +1,67 @@
+ul#navmenu-v a {
+background-color:#DDD;
+border-right:1px solid #FFF;
+border-top:1px solid #FFF;
+display:block;
+text-decoration:none;
+color:#3C3C3C;
+padding:5px;
+}
+
+ul#navmenu-v a:hover,ul#navmenu-v li:hover a,ul#navmenu-v li.iehover a {
+background-color:#BBB;
+color:#D60C0C;
+}
+
+ul#navmenu-v li {
+float:left;
+position:relative;
+width:100%;
+}
+
+ul#navmenu-v li.iehover {
+z-index:1000;
+}
+
+ul#navmenu-v li:hover li a,ul#navmenu-v li.iehover li a {
+background-color:#BBB;
+color:#D60C0C;
+float:none;
+}
+
+ul#navmenu-v li:hover li a:hover,ul#navmenu-v li:hover li:hover a,ul#navmenu-v li.iehover li a:hover,ul#navmenu-v li.iehover li.iehover a,ul#navmenu-v li:hover li:hover li a,ul#navmenu-v li.iehover li.iehover li a {
+background-color:#BBB;
+color:#D60C0C;
+}
+
+ul#navmenu-v li:hover li:hover li a:hover,ul#navmenu-v li:hover li:hover li:hover a,ul#navmenu-v li.iehover li.iehover li a:hover,ul#navmenu-v li.iehover li.iehover li.iehover a,ul#navmenu-v li:hover li:hover li:hover li a,ul#navmenu-v li.iehover li.iehover li.iehover li a {
+background-color:#BBB;
+color:#D60C0C;
+}
+
+ul#navmenu-v li:hover li:hover li:hover li a:hover,ul#navmenu-v li.iehover li.iehover li.iehover li a:hover {
+background-color:#BBB;
+color:#D60C0C;
+}
+
+ul#navmenu-v li:hover ul ul,ul#navmenu-v li:hover ul ul ul,ul#navmenu-v li.iehover ul ul,ul#navmenu-v li.iehover ul ul ul {
+display:none;
+}
+
+ul#navmenu-v li:hover ul,ul#navmenu-v ul li:hover ul,ul#navmenu-v ul ul li:hover ul,ul#navmenu-v li.iehover ul,ul#navmenu-v ul li.iehover ul,ul#navmenu-v ul ul li.iehover ul {
+display:block;
+}
+
+ul#navmenu-v ul {
+display:none;
+left:100%;
+position:absolute;
+top:0;
+z-index:9999;
+}
+
+ul#navmenu-v,ul#navmenu-v li,ul#navmenu-v ul {
+list-style:none;
+margin:0;
+width:100%;
+}
