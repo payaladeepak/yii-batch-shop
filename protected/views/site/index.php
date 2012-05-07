@@ -3,6 +3,18 @@ $this->breadcrumbs=array(
 	'Home',
 );
 ?>
+<?php Yii::app()->getClientScript()->registerScriptFile('/js/imgpreview.min.0.22.jquery.js');?>
+<?php Yii::app()->getClientScript()->registerScript('preview',
+        '$(document).ready(function() {
+            var w = screen.width/3;
+            var xOffset = -screen.width/2.9
+            var yOffset = -200;
+            $(\'.preview\').imgPreview({
+            srcAttr: \'rel\',
+            distanceFromCursor: { top: yOffset, left: xOffset },
+            imgCSS: { width: w }
+        });
+        });');?>
 <h1>Welcome</h1>
 <p><strong class="txt1">Lorem ipsum</strong> 
     In hac habitasse platea dictumst. Mauris rhoncus justo a tortor tincidunt volutpat. In hac habitasse platea dictumst. Praesent volutpat commodo metus in faucibus. Donec vel risus sit amet lorem lacinia vestibulum vitae in eros. In hac habitasse platea dictumst. Integer pharetra volutpat turpis, ac scelerisque arcu imperdiet ac. Praesent sed mi dui, tincidunt interdum quam.
@@ -27,5 +39,4 @@ if ($dataSet->getTotalItemCount() == 0) {
             )
         ));
 }
-Yii::app()->getClientScript()->registerScriptFile('/js/preview.js');
 ?>

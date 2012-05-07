@@ -1,5 +1,16 @@
 <?php Yii::app()->getClientScript()->registerMetaTag(Yii::app()->params['metaDescription'].' - Home','description',null,array('lang' => Yii::app()->params['metaLang']));?>
-<?php Yii::app()->getClientScript()->registerScriptFile('/js/preview.js');?>
+<?php Yii::app()->getClientScript()->registerScriptFile('/js/imgpreview.min.0.22.jquery.js');?>
+<?php Yii::app()->getClientScript()->registerScript('preview',
+        '$(document).ready(function() {
+            var w = screen.width/3;
+            var xOffset = -screen.width/2.9
+            var yOffset = -200;
+            $(\'.preview\').imgPreview({
+            srcAttr: \'rel\',
+            distanceFromCursor: { top: yOffset, left: xOffset },
+            imgCSS: { width: w }
+        });
+        });');?>
 <h1>Random Products</h1>
 <?php $this->breadcrumbs=array(
 	'Products'=>array('/products/index'),
