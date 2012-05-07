@@ -3,9 +3,9 @@ return array(
     'basePath' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '..',
     'name' => 'My company',
     'theme' => 'freearch',
-    'preload' => array(
+    /*'preload' => array(
         'log'
-    ),
+    ),*/
     'import' => array(
         'application.models.*',
         'application.components.*'
@@ -51,7 +51,7 @@ return array(
         'errorHandler' => array(
             'errorAction' => 'site/error'
         ),
-        'log' => array(
+        /*'log' => array(
             'class' => 'CLogRouter',
             'routes' => array(
                 array(
@@ -62,7 +62,7 @@ return array(
                     'class' => 'CWebLogRoute'
                 )
             )
-        )
+        )*/
     ),
     'params' => array(
         'defaultOptions' => "Size: Europe 39\nSize: Europe 40\nSize: Europe 41\nSize: Europe 42\nSize: Europe 43\nSize: Europe 44\nSize: Europe 45\nSize: Europe 46\nSize: Europe 47\nSize: UK 5\nSize: UK 5.5\nSize: UK 6\nSize: UK 7\nSize: UK 7.5\nSize: UK 8.5\nSize: UK 9\nSize: UK 10\nSize: UK 11\nSize: UK 12\nSize: USA 6\nSize: USA 6.5\nSize: USA 7\nSize: USA 8\nSize: USA 8.5\nSize: USA 9.5\nSize: USA 10\nSize: USA 11\nSize: USA 12\nSize: USA 13",
