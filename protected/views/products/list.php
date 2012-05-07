@@ -1,17 +1,6 @@
 <?php $this->pageTitle=Yii::app()->name . ' - Viewing products in '.end($this->breadcrumbs);?>
 <?php Yii::app()->getClientScript()->registerMetaTag(Yii::app()->params['metaDescription'].' - Viewing products in '.end($this->breadcrumbs),'description',null,array('lang' => Yii::app()->params['metaLang']));?>
-<?php Yii::app()->getClientScript()->registerScriptFile('/js/imgpreview.min.0.22.jquery.js');?>
-<?php Yii::app()->getClientScript()->registerScript('preview',
-        '$(document).ready(function() {
-            var w = screen.width/3;
-            var xOffset = -screen.width/2.9
-            var yOffset = -200;
-            $(\'.preview\').imgPreview({
-            srcAttr: \'rel\',
-            distanceFromCursor: { top: yOffset, left: xOffset },
-            imgCSS: { width: w }
-        });
-        });');?>
+<?php $this->renderPartial('_scripts');?>
 <h1>Viewing <?php echo $title;?></h1>
 <?php
 if ($dataSet->getTotalItemCount() == 0) {
