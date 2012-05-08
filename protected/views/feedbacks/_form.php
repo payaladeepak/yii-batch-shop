@@ -29,14 +29,28 @@
 	</div>
 
 	<div class="row">
-                <?php echo $form->labelEx($model,'rating'); ?>
+                <?php echo CHtml::label('Rating',false); ?>
 		<?php $this->widget('CStarRating',array(
                 'model'=>$model,
                 'attribute'=>'rating',
                 'maxRating'=>5,
                 'allowEmpty'=>false,
                 )); ?>
+	</div><br/>
+
+        <?php if(CCaptcha::checkRequirements()): ?>
+	<div class="row">
+		<?php echo $form->labelEx($model,'verifyCode'); ?>
+		<div>
+		<?php $this->widget('CCaptcha'); ?>
+		<?php echo $form->textField($model,'verifyCode'); ?>
+		</div>
+		<div class="hint">Please enter the letters as they are shown in the image above.
+		<br/>Letters are not case-sensitive.</div>
+		<?php echo $form->error($model,'verifyCode'); ?>
 	</div>
+	<?php endif; ?>
+
         <br/>
 	<div class="row buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Submit'); ?>

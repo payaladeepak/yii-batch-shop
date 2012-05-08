@@ -2,6 +2,10 @@
 class FeedbacksController extends Controller
 {
     public $layout = '//layouts/column2';
+    public function init() {
+        Yii::app()->clientScript->registerCssFile(Yii::app()->getBaseUrl().'/css/menu.css');
+        parent::init();
+    }
     public function filters()
     {
         return array('accessControl');
@@ -12,6 +16,15 @@ class FeedbacksController extends Controller
             array('allow','actions' => array('index','create'),'users' => array('*')),
             array('allow','users' => array('admin')),
             array('deny','users' => array('*')),
+        );
+    }
+    public function actions()
+    {
+        return array(
+            'captcha' => array(
+                'class' => 'CCaptchaAction',
+                'backColor' => 0xF7F7F7
+            ),
         );
     }
     public function actionCreate()

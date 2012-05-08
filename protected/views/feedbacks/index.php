@@ -2,12 +2,21 @@
 	'Feedbacks',
 );
 ?>
-
 <h1>Feedbacks</h1>
-
-<?php $this->widget('zii.widgets.CListView', array(
-	'dataProvider'=>$dataProvider,
-	'itemView'=>'_view',
-)); ?>
-<hr/>
-<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+<?php
+$this->widget('CTabView', array(
+    'cssFile'=>'/css/tabs.css',
+    'tabs' => array(
+        'tab1' => array(
+            'title' => 'View feedbacks',
+            'view' => '_list',
+            'data' => array('dataProvider' => $dataProvider),
+        ),
+        'tab2' => array(
+            'title' => 'Post a feedback',
+            'view' => '_form',
+            'data' => array('model' => $model),
+        ),
+    )
+));
+?>

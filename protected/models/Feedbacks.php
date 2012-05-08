@@ -1,6 +1,7 @@
 <?php
 class Feedbacks extends CActiveRecord
 {
+    public $verifyCode;
     public static function model($className = __CLASS__)
     {
         return parent::model($className);
@@ -15,6 +16,7 @@ class Feedbacks extends CActiveRecord
             array('content, country, email, status','required'),
             array('rating, status','numerical','integerOnly' => true),
             array('email, country','length','max' => 48),
+            array('verifyCode','captcha','allowEmpty'=>!CCaptcha::checkRequirements()),
             array('content, country, email, rating, status','safe','on' => 'search')
         );
     }
@@ -30,7 +32,8 @@ class Feedbacks extends CActiveRecord
             'country' => 'Country',
             'email' => 'Email',
             'rating' => 'Rating',
-            'status' => 'Status'
+            'status' => 'Status',
+            'verifyCode'=>'Verification Code',
         );
     }
     public function search()
