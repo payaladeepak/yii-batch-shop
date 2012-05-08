@@ -1,16 +1,37 @@
 <?php $this->pageTitle=Yii::app()->name . ' - Viewing : '.$this->model->title;?>
 <?php Yii::app()->getClientScript()->registerMetaTag(Yii::app()->params['metaDescription'].' - Viewing : '.$this->model->title,'description',null,array('lang' => Yii::app()->params['metaLang']));?>
+<?php Yii::app()->getClientScript()->registerCssFile(Yii::app()->baseUrl . '/js/fancybox/jquery.fancybox.css?v=2.0.6','screen');?>
+<?php Yii::app()->getClientScript()->registerCssFile(Yii::app()->baseUrl . '/js/fancybox/helpers/jquery.fancybox-thumbs.css?v=2.0.6','screen');?>
+<?php Yii::app()->getClientScript()->registerScriptFile(Yii::app()->baseUrl . '/js/fancybox/jquery.fancybox.pack.js?v=2.0.6');?>
+<?php Yii::app()->getClientScript()->registerScriptFile(Yii::app()->baseUrl . '/js/fancybox/helpers/jquery.fancybox-thumbs.js?v=2.0.6');?>
+<?php Yii::app()->getClientScript()->registerScript('fancybox',
+'$(document).ready(function () {
+    $(".fancybox-thumb").fancybox({
+        prevEffect: \'none\',
+        nextEffect: \'none\',
+        helpers: {
+            title: {
+                type: \'outside\'
+            },
+            overlay: {
+                opacity: 0.8,
+                css: {
+                    \'background-color\': \'#000\'
+                }
+            },
+            thumbs: {
+                width: 50,
+                height: 50
+            }
+        }
+});});'
+        );?>
 <h1>Product : <?php echo $this->model->title; ?></h1>
 <table>
     <tbody>
         <tr>
             <td style="padding-right:20px;">
-                <?php $this->widget('ext.lyiightbox.LyiightBox2', array(
-                    'thumbnail' => $this->model->thumb_url,
-                    'image' => $this->model->image_url,
-                    'title' => $this->model->title,
-                    ));
-                ?>
+                <?php echo CHtml::link(CHtml::image($this->model->thumb_url), $this->model->image_url, array('title' => $this->model->title, 'class' => 'fancybox-thumb', 'rel' => 'fancybox-thumb')); ?>
             </td>
             <td align="left" width="80%" style="vertical-align: top;">
                 <p style="color:#D60C0C;font-weight:bold;">Price&nbsp;:&nbsp;<?php echo $this->model->price . Yii::app()->params['currencySymbol'];?></p>
@@ -30,7 +51,7 @@
                     <?php endif; ?>
                     <p>
                         Choose quantity&nbsp;:
-                        <input type="text" name="quantity" value="1">
+                        <input type="text" name="quantity" value="1" size="4" maxlength="4">
                     </p>
                     <input type="hidden" name="item_name" value="<?php echo $itemCat.' - '.$this->model->title;?>">
                     <input type="hidden" name="amount" value="<?php echo $this->model->price;?>">
@@ -43,7 +64,28 @@
                 </form> 
             </td>
         </tr>
+        <tr>
+            <td colspan="2">
+                <p>Click on the image above to enlarge it.</p>
+            </td>
+        </tr>
     </tbody>
 </table>
-<br/>
-<h5>Click on the image above to enlarge it.</h5>
+<h4>Feedbacks</h4>
+<?php
+$this->widget('CTabView', array(
+    'cssFile'=>'/css/tabs.css',
+    'tabs' => array(
+        'tab1' => array(
+            'title' => 'View feedbacks',
+            'view' => 'feedbacks/_list',
+            'data' => array('dataProvider' => $dataProvider),
+        ),
+        'tab2' => array(
+            'title' => 'Post a feedback',
+            'view' => 'feedbacks/_form',
+            'data' => array('feedbacks' => $feedbacks),
+        ),
+    )
+));
+?>

@@ -13,7 +13,7 @@ if($dataSet->getTotalItemCount()==0) {
     echo 'No results found.';
 }
 else {
-    Yii::app()->clientScript->registerCssFile(Yii::app()->getBaseUrl().'/css/product.css');
+    Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/product.css');
     $this->widget('zii.widgets.CListView',array(
         'dataProvider'=>$dataSet,
         'itemView'=>'_item',

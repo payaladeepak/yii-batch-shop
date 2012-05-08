@@ -49,7 +49,8 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'rating',
 		'status',
 		array(
-			'class'=>'CButtonColumn',
+                    'class'=>'CButtonColumn',
+                    'template'=>'{update}{delete}',
 		),
 	),
 )); ?>

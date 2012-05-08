@@ -6,7 +6,7 @@ class MenuController extends Controller {
     public $model,$open_nodes;
 
     public function init() {
-        $this->registerCssAndJs('webroot.js.fancybox','/jquery.fancybox-1.3.4.js','/jquery.fancybox-1.3.4.css');
+        $this->registerCssAndJs('webroot.js.fancybox','/jquery.fancybox.pack.js','/jquery.fancybox.css');
         Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl . '/css/client_val_form.css', 'screen');      
         parent::init();
         $f=Menu::model()->findAll(array('order'=>'lft'));

@@ -18,15 +18,6 @@ class FeedbacksController extends Controller
             array('deny','users' => array('*')),
         );
     }
-    public function actions()
-    {
-        return array(
-            'captcha' => array(
-                'class' => 'CCaptchaAction',
-                'backColor' => 0xF7F7F7
-            ),
-        );
-    }
     public function actionCreate()
     {
         $model = new Feedbacks;
@@ -57,12 +48,7 @@ class FeedbacksController extends Controller
     }
     public function actionIndex()
     {
-        $model = new Feedbacks;
-        $dataProvider = new CActiveDataProvider('Feedbacks');
-        $this->render('index', array(
-            'dataProvider' => $dataProvider,
-            'model' => $model,
-        ));
+        
     }
     public function actionAdmin()
     {

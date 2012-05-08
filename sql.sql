@@ -11,7 +11,9 @@ CREATE TABLE IF NOT EXISTS `feedbacks` (
   `rating` tinyint(2) DEFAULT NULL,
   `date_added` int(11) unsigned DEFAULT NULL,
   `status` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
+  `product_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `product_id` (`product_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- 

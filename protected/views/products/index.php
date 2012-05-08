@@ -9,7 +9,7 @@
 if ($dataSet->getTotalItemCount() == 0) {
     echo 'Sorry, currently there are no products available in this category.';
 } else {
-    Yii::app()->clientScript->registerCssFile(Yii::app()->getBaseUrl() . '/css/product.css');
+    Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl . '/css/product.css');
     $this->widget('zii.widgets.CListView', array(
         'dataProvider' => $dataSet,
         'itemView' => '_item',

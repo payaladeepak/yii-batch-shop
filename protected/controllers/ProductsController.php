@@ -17,17 +17,20 @@ class ProductsController extends Controller {
         return array('accessControl');
     }
     public function accessRules() {
-        return array(array('allow','actions'=>array(
-            'index',
-            'details',
-            'search',
-        ),'users'=>array(
-            '*',
-        )),array('allow','users'=>array(
-            'admin',
-        )),array('deny','users'=>array(
-            '*',
-        )),);
+        return array(
+            array('allow','actions'=>array('index','details','search','captcha'),'users'=>array('*')),
+            array('allow','users'=>array('admin')),
+            array('deny','users'=>array('*')),
+            );
+    }
+    public function actions()
+    {
+        return array(
+            'captcha' => array(
+                'class' => 'CCaptchaAction',
+                'backColor' => 0xF7F7F7
+            ),
+        );
     }
     public function missingAction($id) {
         $this->actionIndex($id);
@@ -166,7 +169,16 @@ class ProductsController extends Controller {
         $this->_loadBreadcrumbs($this->model->menu,$this->model->menu->id);
         $itemCat=$this->_itemCat($this->breadcrumbs);
         array_push($this->breadcrumbs,$this->model->title);
-        $this->render('details',array('options'=>$options,'itemCat'=>$itemCat));
+        // Feedbacks vars
+        $feedbacks = new Feedbacks;
+        $dataProvider = new CActiveDataProvider('Feedbacks');
+        //
+        $this->render('details',array(
+            'options'=>$options,
+            'itemCat'=>$itemCat,
+            'dataProvider' => $dataProvider,
+            'feedbacks' => $feedbacks,
+            ));
     }
     public function actionAdmin() {
         $model=new Products('search');

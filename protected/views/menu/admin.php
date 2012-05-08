@@ -68,20 +68,10 @@ $this->breadcrumbs=array(
                                 'complete' : function(){
                                     $("#<?php echo Menu::ADMIN_TREE_CONTAINER_ID; ?>").removeClass("ajax-sending");
                                 },
-                                success: function(data){
-                                    
+                                success :  function(data){
                                     $.fancybox(data,
-                                    {    "transitionIn"	:	"elastic",
-                                        "transitionOut"    :      "elastic",
-                                        "speedIn"		:	600,
-                                        "speedOut"		:	200,
-                                        "overlayShow"	:	false,
-                                        "hideOnContentClick": false,
-                                        "onClosed":    function(){
-                                        } //onclosed function
-                                    })//fancybox
-                                    
-                                } //success
+                                         {})//fancybox
+                                } //function
                             });//ajax
                             
                         }//action function
@@ -107,16 +97,7 @@ $this->breadcrumbs=array(
                                 },
                                 success :  function(data){
                                     $.fancybox(data,
-                                    {    "transitionIn"	:	"elastic",
-                                        "transitionOut"    :      "elastic",
-                                        "speedIn"		:	600,
-                                        "speedOut"		:	200,
-                                        "overlayShow"	:	false,
-                                        "hideOnContentClick": false,
-                                        "onClosed":    function(){
-                                        } //onclosed function
-                                    })//fancybox
-                                    
+                                         {})//fancybox
                                 } //function
                                 
                                 
@@ -220,15 +201,7 @@ $this->breadcrumbs=array(
                                      success: function(data){
                                          
                                          $.fancybox(data,
-                                         {    "transitionIn"	:	"elastic",
-                                             "transitionOut"    :      "elastic",
-                                             "speedIn"		:	600,
-                                             "speedOut"		:	200,
-                                             "overlayShow"	:	false,
-                                             "hideOnContentClick": false,
-                                             "onClosed":    function(){
-                                             } //onclosed function
-                                         })//fancybox
+                                         {})//fancybox
                                          
                                      } //success
                                  });//ajax
@@ -327,15 +300,7 @@ $this->breadcrumbs=array(
                                      success:    function(data){
                                          
                                          $.fancybox(data,
-                                         {    "transitionIn"	:	"elastic",
-                                             "transitionOut"    :      "elastic",
-                                             "speedIn"		:	600,
-                                             "speedOut"		:	200,
-                                             "overlayShow"	:	false,
-                                             "hideOnContentClick": false,
-                                             "onClosed":    function(){
-                                             } //onclosed function
-                                         })//fancybox
+                                         {})//fancybox
                                          
                                      } //function
                                      
