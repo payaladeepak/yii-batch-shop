@@ -9,7 +9,7 @@ class Controller extends CController {
     protected function registerAssets() {
         Yii::app()->clientScript->registerCoreScript('jquery');
         $this->registerJs('webroot.js.jstree','jquery.jstree.js');
-        Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl.'/js/json2/json2.js');
+        Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl.'/js/json2.js');
     }
     protected static function registerCssAndJs($folder,$jsfile,$cssfile) {
         $sourceFolder=YiiBase::getPathOfAlias($folder);
