@@ -20,7 +20,7 @@
 	<div class="container">
 <!-- .logo -->
 		<div class="logo">
-			<a href="index.html"><img src="<?php echo Yii::app()->theme->baseUrl ?>/images/logo.png" alt="" /></a>
+			<a href="index.html"><img src="<?php echo Yii::app()->theme->baseUrl ?>/images/logo.jpg" alt="" /></a>
 		</div>
 <!-- /.logo -->
 		<?php echo CHtml::beginForm($this->createUrl('products/search'),'GET',array('id'=>'search-form'));?>
