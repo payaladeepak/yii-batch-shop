@@ -38,7 +38,7 @@ class Products extends CActiveRecord {
         return array(
             'title'=>'Photo(s)',
             'price'=>'Price',
-            'options'=>'Options (One option per line)',
+            'options'=>'Options',
             'menu_id'=>'Menu',
             'image_url'=>'Image',
             'thumb_url'=>'Image',

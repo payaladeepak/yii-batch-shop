@@ -1,7 +1,6 @@
 <div class="form">
 
 <?php $form=$this->beginWidget('CActiveForm', array(
-	/*'action'=>array('products/addfeedback'),*/
         'id'=>'feedbacks-form',
 	'enableAjaxValidation'=>false,
 )); ?>
@@ -10,14 +9,18 @@
 
 	<?php echo $form->errorSummary($feedbacks); ?>
 	<div class="row">
-		<?php echo $form->labelEx($feedbacks,'email'); ?>
-		<?php echo $form->textField($feedbacks,'email',array('size'=>48,'maxlength'=>48)); ?>
-		<?php echo $form->error($feedbacks,'email'); ?>
+		<?php echo $form->labelEx($feedbacks,'nickname'); ?>
+		<?php echo $form->textField($feedbacks,'nickname',array('size'=>48,'maxlength'=>48)); ?>
+		<?php echo $form->error($feedbacks,'nickname'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($feedbacks,'country'); ?>
-		<?php echo $form->textField($feedbacks,'country',array('size'=>48,'maxlength'=>48)); ?>
+		<?php $this->widget('ext.CountrySelectorWidget', array(
+                    'value' => $feedbacks->country,
+                    'name' => Chtml::activeName($feedbacks, 'country'),
+                    'id' => Chtml::activeId($feedbacks, 'country'),
+                )); ?>
 		<?php echo $form->error($feedbacks,'country'); ?>
 	</div>
 

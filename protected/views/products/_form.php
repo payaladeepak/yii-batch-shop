@@ -26,7 +26,7 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($this->model,'options'); ?>
+		<?php echo $form->labelEx($this->model,'options',array('label'=>'Options (One option per line)')); ?>
 		<?php echo $form->textArea($this->model,'options',array('rows'=>6, 'cols'=>50)); ?>
 		<?php echo CHtml::button('Clear',array('id'=>'clear')); ?>
 		<?php echo $form->error($this->model,'options'); ?>

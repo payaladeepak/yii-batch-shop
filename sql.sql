@@ -5,9 +5,9 @@
 DROP TABLE IF EXISTS `feedbacks`;
 CREATE TABLE IF NOT EXISTS `feedbacks` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nickname` varchar(48) NOT NULL,
+  `country` tinytext NOT NULL,
   `content` text NOT NULL,
-  `country` varchar(48) NOT NULL,
-  `email` varchar(48) NOT NULL,
   `rating` tinyint(2) DEFAULT NULL,
   `date_added` int(11) unsigned DEFAULT NULL,
   `status` tinyint(1) NOT NULL,
