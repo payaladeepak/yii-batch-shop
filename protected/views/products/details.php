@@ -27,14 +27,23 @@
 });});'
         );?>
 <h1>Product : <?php echo $this->model->title; ?></h1>
-<table>
+<table width="100%">
     <tbody>
         <tr>
-            <td style="padding-right:20px;">
-                <?php echo CHtml::link(CHtml::image($this->model->thumb_url), $this->model->image_url, array('title' => $this->model->title, 'class' => 'fancybox-thumb', 'rel' => 'fancybox-thumb')); ?>
+            <td colspan="2" align="center">
+                <?php echo CHtml::link(CHtml::image($this->model->image_url,$this->model->title,array('style'=>'max-width:'.Yii::app()->params['maxWidth'].'px;')), $this->model->image_url, array('title' => $this->model->title, 'class' => 'fancybox-thumb', 'rel' => 'fancybox-thumb')); ?>
             </td>
-            <td align="left" width="80%" style="vertical-align: top;">
+        </tr>
+        <tr>
+            <td colspan="2">
+                <p>Click on the image above to enlarge it.</p>
+            </td>
+        </tr>
+        <tr>
+            <td style="vertical-align: top;">
                 <p style="color:#D60C0C;font-weight:bold;">Price&nbsp;:&nbsp;<?php echo $this->model->price . Yii::app()->params['currencySymbol'];?></p>
+            </td>
+            <td>
                 <form target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post">
                     <input type="hidden" name="business" value="<?php echo Yii::app()->params['adminEmail'];?>">
                     <input type="hidden" name="cmd" value="_cart">
@@ -61,12 +70,7 @@
                         <input type="image" name="submit" border="0" src="https://www.paypal.com/en_US/i/btn/btn_cart_LG.gif" alt="PayPal - The safer, easier way to pay online">
                     </p>
                     <img alt="" border="0" width="1" height="1" src="https://www.paypal.com/en_US/i/scr/pixel.gif" >
-                </form> 
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <p>Click on the image above to enlarge it.</p>
+                </form>
             </td>
         </tr>
     </tbody>
@@ -75,6 +79,7 @@
 <?php
 $this->widget('CTabView', array(
     'cssFile'=>'/css/tabs.css',
+    'activeTab'=>(Yii::app()->request->isPostRequest?'tab2':'tab1'),
     'tabs' => array(
         'tab1' => array(
             'title' => 'View feedbacks',

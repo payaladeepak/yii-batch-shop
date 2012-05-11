@@ -29,7 +29,10 @@ class Products extends CActiveRecord {
             );
     }
     public function relations() {
-        return array('menu'=>array(self::BELONGS_TO,'Menu','menu_id',));
+        return array(
+            'menu'=>array(self::BELONGS_TO,'Menu','menu_id',),
+            'feedbacks'=>array(self::HAS_MANY,'Feedbacks','product_id'),
+            );
     }
     public function attributeLabels() {
         return array(

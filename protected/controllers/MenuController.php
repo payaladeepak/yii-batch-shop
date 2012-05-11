@@ -1,14 +1,13 @@
 <?php
 class MenuController extends Controller {
 
-    public $layout='//layouts/column2';
     public $defaultAction='admin';
     public $model,$open_nodes;
 
     public function init() {
         $this->registerCssAndJs('webroot.js.fancybox','/jquery.fancybox.pack.js','/jquery.fancybox.css');
         Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl . '/css/client_val_form.css', 'screen');      
-        parent::init();
+        $this->registerAssets();
         $f=Menu::model()->findAll(array('order'=>'lft'));
         $identifiers=array();
         foreach($f as $n=>$category)

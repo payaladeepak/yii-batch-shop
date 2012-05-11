@@ -1,7 +1,7 @@
 <div class="form">
 
 <?php $form=$this->beginWidget('CActiveForm', array(
-	'action'=>'feedbacks/create',
+	/*'action'=>array('products/addfeedback'),*/
         'id'=>'feedbacks-form',
 	'enableAjaxValidation'=>false,
 )); ?>
@@ -9,7 +9,6 @@
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
 
 	<?php echo $form->errorSummary($feedbacks); ?>
-
 	<div class="row">
 		<?php echo $form->labelEx($feedbacks,'email'); ?>
 		<?php echo $form->textField($feedbacks,'email',array('size'=>48,'maxlength'=>48)); ?>

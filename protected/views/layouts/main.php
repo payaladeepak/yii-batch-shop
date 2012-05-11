@@ -45,7 +45,6 @@ $this->widget('zii.widgets.CMenu', array(
         array('label' => 'Home', 'url' => array('/site/index')),
         array('label' => 'Payment', 'url' => array('/site/page', 'view' => 'payment')),
         array('label' => 'Shipping', 'url' => array('/site/page', 'view' => 'shipping')),
-        array('label' => 'Feedbacks', 'url' => array('/feedbacks')),
         array('label' => 'About', 'url' => array('/site/page', 'view' => 'about')),
         array('label' => 'Contact', 'url' => array('/site/contact')),
         array('label' => 'Login', 'url' => array('/site/login'), 'visible' => Yii::app()->user->isGuest),

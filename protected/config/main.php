@@ -71,8 +71,9 @@ return array(
         'adminEmail' => 'admin@example.com',
         'metaDescription'=>'',
         'metaLang'=>'en',
-        // Image vars (percentages)
-        'previewMaxWidth'=>'30',
+        // Image vars 
+        'previewMaxWidth'=>'30',// in percentages
+        'maxWidth'=>'600',// products/details page (in px)
         // Directories (from root path)
         'directories' => array(
             'upload' => 'upload',

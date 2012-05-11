@@ -1,7 +1,7 @@
 <?php
 class Feedbacks extends CActiveRecord
 {
-    public $verifyCode;
+    public $verifyCode,$date_added,$product_id;
     public static function model($className = __CLASS__)
     {
         return parent::model($className);
@@ -13,7 +13,8 @@ class Feedbacks extends CActiveRecord
     public function rules()
     {
         return array(
-            array('content, country, email, status','required'),
+            array('content, country, email','required'),
+         //   array('email','email'),
             array('rating, status','numerical','integerOnly' => true),
             array('email, country','length','max' => 48),
             array('verifyCode','captcha','allowEmpty'=>!CCaptcha::checkRequirements()),
@@ -22,7 +23,7 @@ class Feedbacks extends CActiveRecord
     }
     public function relations()
     {
-        return array();
+        return array('product'=>array(self::BELONGS_TO,'Products','product_id',));
     }
     public function attributeLabels()
     {
@@ -34,6 +35,7 @@ class Feedbacks extends CActiveRecord
             'rating' => 'Rating',
             'status' => 'Status',
             'verifyCode'=>'Verification Code',
+            'date_added'=>'Added on',
         );
     }
     public function search()

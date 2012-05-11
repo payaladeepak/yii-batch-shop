@@ -1,11 +1,6 @@
 <?php
 class FeedbacksController extends Controller
 {
-    public $layout = '//layouts/column2';
-    public function init() {
-        Yii::app()->clientScript->registerCssFile(Yii::app()->getBaseUrl().'/css/menu.css');
-        parent::init();
-    }
     public function filters()
     {
         return array('accessControl');
@@ -18,22 +13,8 @@ class FeedbacksController extends Controller
             array('deny','users' => array('*')),
         );
     }
-    public function actionCreate()
-    {
-        $model = new Feedbacks;
-        $dataProvider = new CActiveDataProvider('Feedbacks');
-        if (isset($_POST['Feedbacks'])) {
-            $model->attributes = $_POST['Feedbacks'];
-            if ($model->save())
-                $this->redirect(array(
-                    'view',
-                    'id' => $model->id
-                ));
-        }
-        $this->render('index', array(
-            'dataProvider' => $dataProvider,
-            'model' => $model,
-        ));
+    public function missingAction() {
+        $this->redirect(array('site/index'));
     }
     public function actionDelete($id)
     {
@@ -45,10 +26,6 @@ class FeedbacksController extends Controller
                 ));
         } else
             throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
-    }
-    public function actionIndex()
-    {
-        
     }
     public function actionAdmin()
     {

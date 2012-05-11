@@ -1,11 +1,9 @@
 <?php
 class Controller extends CController {
-    public $layout='//layouts/column1';
     public $menu=array();
     public $breadcrumbs=array();
-    public function init() {
-        $this->registerAssets();
-    }
+    public $layout='//layouts/column2';
+    
     protected function registerAssets() {
         Yii::app()->clientScript->registerCoreScript('jquery');
         $this->registerJs('webroot.js.jstree','jquery.jstree.js');

@@ -1,7 +1,6 @@
 <?php
 class SiteController extends Controller
 {
-    public $layout = '//layouts/column2';
     public function actions()
     {
         return array(
@@ -16,7 +15,7 @@ class SiteController extends Controller
     }
     public function init() {
         Yii::app()->clientScript->registerCssFile(Yii::app()->getBaseUrl().'/css/menu.css');
-        parent::init();
+        $this->registerAssets();
     }
     public function actionIndex()
     {

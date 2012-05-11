@@ -1,6 +1,5 @@
 <?php
 class ProductsController extends Controller {
-    public $layout='//layouts/column2';
     public $allowedTypes=array(
         'image/gif',
         'image/jpeg',
@@ -9,9 +8,10 @@ class ProductsController extends Controller {
     );
     public $thumbWidth=150;
     public $thumbHeight,$imgDir,$thumbsDir,$uploadDir,$model;
+    
     public function init() {
-        Yii::app()->clientScript->registerCssFile(Yii::app()->getBaseUrl().'/css/menu.css');
-        parent::init();
+        if (Yii::app()->user->isGuest)
+            Yii::app()->clientScript->registerCssFile(Yii::app()->getBaseUrl().'/css/menu.css');
     }
     public function filters() {
         return array('accessControl');
@@ -30,6 +30,9 @@ class ProductsController extends Controller {
                 'class' => 'CCaptchaAction',
                 'backColor' => 0xF7F7F7
             ),
+            'page' => array(
+                'class' => 'CViewAction'
+            )
         );
     }
     public function missingAction($id) {
@@ -52,6 +55,7 @@ class ProductsController extends Controller {
     }
     public function actionCreate() {
         $this->model=new Products('create');
+        $this->model->options=Yii::app()->params['defaultOptions'];
         if(Yii::app()->request->getPost('Products')) {
             $this->model->setAttributes($_POST['Products']);
             if($this->model->validate()) {
@@ -98,7 +102,6 @@ class ProductsController extends Controller {
                 $this->redirect('admin');
             }
         }
-        $this->model->options=Yii::app()->params['defaultOptions'];
         $this->render('create',array('listData'=>$this->_selectList()));
     }
     public function actionUpdate($id) {
@@ -164,19 +167,32 @@ class ProductsController extends Controller {
         }
     }
     public function actionDetails($id) {
+       $feedbacks = new Feedbacks;
+        if (isset($_POST['Feedbacks'])) {
+            $feedbacks->setAttributes($_POST['Feedbacks']);
+          //  print_r($feedbacks->attributes);exit;
+            if ($feedbacks->validate()) {
+                $feedbacks->date_added=time();
+                $feedbacks->product_id=$id;
+                $feedbacks->save(false);
+                Yii::app()->user->setFlash('feedback', 'Your feedback was received, it will be visible once it is approved.');
+                $this->refresh();
+            }
+           // $this->render('details',array('feedback'=>$model));
+        }
+    //  / // print_r($_POST['requestUri']);exit;
+    //    $this->redirect(array($_POST['requestUri']));
+       // $this->refresh();
         $this->loadModel($id,'','menu');
         $options=explode("\n",$this->model->options);
         $this->_loadBreadcrumbs($this->model->menu,$this->model->menu->id);
         $itemCat=$this->_itemCat($this->breadcrumbs);
         array_push($this->breadcrumbs,$this->model->title);
-        // Feedbacks vars
-        $feedbacks = new Feedbacks;
-        $dataProvider = new CActiveDataProvider('Feedbacks');
-        //
         $this->render('details',array(
+         /*   'id'=>$id,*/
             'options'=>$options,
             'itemCat'=>$itemCat,
-            'dataProvider' => $dataProvider,
+            'dataProvider' => new CActiveDataProvider('Feedbacks'),
             'feedbacks' => $feedbacks,
             ));
     }
