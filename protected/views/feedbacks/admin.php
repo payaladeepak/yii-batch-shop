@@ -4,11 +4,6 @@ $this->breadcrumbs=array(
 	'Manage',
 );
 
-$this->menu=array(
-	array('label'=>'List Feedbacks', 'url'=>array('index')),
-	array('label'=>'Create Feedbacks', 'url'=>array('create')),
-);
-
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
 	$('.search-form').toggle();
@@ -42,10 +37,9 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
-		'id',
 		'content',
 		'country',
-		'email',
+		'nickname',
 		'rating',
 		'status',
 		array(

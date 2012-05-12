@@ -1,17 +1,9 @@
-<!--
- Nested Set Admin GUI
- Main View File  index.php
-
- @author Spiros Kabasakalis <kabasakalis@gmail.com>,myspace.com/spiroskabasakalis
- @copyright Copyright &copy; 2011 Spiros Kabasakalis
- @since 1.0
- @license The MIT License-->
 <?php
 $this->breadcrumbs=array(
 	'Manage Menus',
 );
 ?>
-<h1>Manage Menu</h1>
+<h1>Manage Menus</h1>
 <ul>
     <li>If tree is empty,start by creating one or more root nodes.</li>
     <li>Right Click on a node to see available operations.</li>
@@ -27,8 +19,8 @@ $this->breadcrumbs=array(
     </div>
 </div>
 <!--The tree will be rendered in this div-->
-<div id="<?php echo Menu::ADMIN_TREE_CONTAINER_ID; ?>" ></div>
-<script  type="text/javascript">
+<div id="<?php echo Menu::ADMIN_TREE_CONTAINER_ID; ?>"></div>
+<script type="text/javascript">
     $(function () {
         $("#<?php echo Menu::ADMIN_TREE_CONTAINER_ID; ?>")
         .jstree({

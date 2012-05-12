@@ -10,8 +10,9 @@
             <?php else: ?>
                 <?php if (empty($this->menu)):?>
                     <?php $this->menu=array(
-                        array('label'=>'Manage Menus', 'url'=>array('/menu/admin')),
-                        array('label'=>'Manage Products', 'url'=>array('/products/admin')),
+                        array('label'=>'Manage Menus', 'url'=>array('menu/admin')),
+                        array('label'=>'Manage Products', 'url'=>array('products/admin')),
+                        array('label'=>'Manage Feedbacks', 'url'=>array('feedbacks/admin')),
                     );?>
                 <?php endif;?>
                 <?php $this->beginWidget('zii.widgets.CPortlet', array('title' => 'Menu')); ?>

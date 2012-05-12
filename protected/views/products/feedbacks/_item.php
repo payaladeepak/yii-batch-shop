@@ -1,18 +1,5 @@
-<div class="view">
-	<b><?php echo CHtml::encode($data->getAttributeLabel('content')); ?>:</b>
-	<?php echo CHtml::encode($data->content); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('country')); ?>:</b>
-	<?php echo CHtml::encode($data->country); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('nickname')); ?>:</b>
-	<?php echo CHtml::encode($data->nickname); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('rating')); ?>:</b>
-	<?php $this->widget('CStarRating',array(
+<div class="view" style="border:1px solid #BBBBBB;">
+    <?php $this->widget('CStarRating',array(
                 'model'=>$data,
                 'attribute'=>'rating',
             //    'name'=>'rating',
@@ -20,5 +7,8 @@
               //  'id'=>$data->id,
                 'maxRating'=>5,
                 'readOnly'=>true
-                )); ?>
+                )); ?><br />
+    <strong>From&nbsp;:&nbsp;</strong><?php echo CHtml::encode($data->nickname); ?>
+    &nbsp;-&nbsp;<?php echo CHtml::encode($data->country); ?><br />
+    <i><?php echo CHtml::encode($data->content); ?></i>
 </div>

@@ -7,8 +7,8 @@
             ));
     ?>
     <div class="row">
-        <?php echo $form->label($model, 'email'); ?>
-        <?php echo $form->textField($model, 'email', array('size' => 48, 'maxlength' => 48)); ?>
+        <?php echo $form->label($model, 'nickname'); ?>
+        <?php echo $form->textField($model, 'nickname', array('size' => 48, 'maxlength' => 48)); ?>
     </div>
 
     <div class="row">

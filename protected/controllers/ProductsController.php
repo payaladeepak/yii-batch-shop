@@ -167,7 +167,7 @@ class ProductsController extends Controller {
         }
     }
     public function actionDetails($id) {
-       $feedbacks = new Feedbacks;
+        $feedbacks = new Feedbacks;
         if (isset($_POST['Feedbacks'])) {
             $feedbacks->setAttributes($_POST['Feedbacks']);
           //  print_r($feedbacks->attributes);exit;
@@ -178,21 +178,21 @@ class ProductsController extends Controller {
                 Yii::app()->user->setFlash('feedback', 'Your feedback was received, it will be visible once it is approved.');
                 $this->refresh();
             }
-           // $this->render('details',array('feedback'=>$model));
         }
-    //  / // print_r($_POST['requestUri']);exit;
-    //    $this->redirect(array($_POST['requestUri']));
-       // $this->refresh();
-        $this->loadModel($id,'','menu');
+        $this->loadModel($id);
         $options=explode("\n",$this->model->options);
         $this->_loadBreadcrumbs($this->model->menu,$this->model->menu->id);
         $itemCat=$this->_itemCat($this->breadcrumbs);
         array_push($this->breadcrumbs,$this->model->title);
         $this->render('details',array(
-         /*   'id'=>$id,*/
             'options'=>$options,
             'itemCat'=>$itemCat,
-            'dataProvider' => new CActiveDataProvider('Feedbacks'),
+            'dataProvider' => new CActiveDataProvider('Feedbacks',array(
+                'criteria'=>array(
+                    'condition'=>'product_id='.$id,
+                    ),
+                )
+            ),
             'feedbacks' => $feedbacks,
             ));
     }
