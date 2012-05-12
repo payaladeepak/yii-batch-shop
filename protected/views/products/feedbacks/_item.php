@@ -15,6 +15,9 @@
 	<?php $this->widget('CStarRating',array(
                 'model'=>$data,
                 'attribute'=>'rating',
+            //    'name'=>'rating',
+                'value'=>$data->rating,
+              //  'id'=>$data->id,
                 'maxRating'=>5,
                 'readOnly'=>true
                 )); ?>
