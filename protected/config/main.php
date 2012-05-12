@@ -35,12 +35,13 @@ return array(
             'urlFormat' => 'path',
             'showScriptName' => false,
             'rules' => array(
-                '<controller:\w+>/<id:\d+>' => '<controller>/view',
-                '<controller:\w+>/<id:\d+>\-.+' => '<controller>/<id:>',
-                '<controller:\w+>/<action:\w+>/<id:\d+>\-.+' => '<controller>/<action>/<id:>',
+              /*  '<controller:\w+>/<id:\d+>' => '<controller>/view',
+                '<controller:\w+>/<id:\d+>\-\.*' => '<controller>',
+                '<controller:\w+>/<action:\w+>/<id:\d+>\-\.*' => '<controller>/<action>',
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
-                '<controller:\w+>/<action:\w+>' => '<controller>/<action>'
-            )
+                '<controller:\w+>/<action:\w+>' => '<controller>/<action>'*/
+                'class' => 'application.components.UrlRouter',
+            ),
         ),
         'db' => array(
             'connectionString' => 'mysql:host=localhost;dbname=db',
