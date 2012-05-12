@@ -170,12 +170,12 @@ class ProductsController extends Controller {
         $feedbacks = new Feedbacks;
         if (isset($_POST['Feedbacks'])) {
             $feedbacks->setAttributes($_POST['Feedbacks']);
-          //  print_r($feedbacks->attributes);exit;
             if ($feedbacks->validate()) {
                 $feedbacks->date_added=time();
                 $feedbacks->product_id=$id;
                 $feedbacks->save(false);
                 Yii::app()->user->setFlash('feedback', 'Your feedback was received, it will be visible once it is approved.');
+           //     print_r(Yii::app()->user->getFlash('feedback'));exit;
                 $this->refresh();
             }
         }
