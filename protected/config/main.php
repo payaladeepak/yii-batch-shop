@@ -8,7 +8,8 @@ return array(
     ),
     'import' => array(
         'application.models.*',
-        'application.components.*'
+        'application.components.*',
+        'application.extensions.jtogglecolumn.*',
     ),
     'modules' => array(),
     'components' => array(

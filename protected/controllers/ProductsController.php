@@ -189,7 +189,7 @@ class ProductsController extends Controller {
             'itemCat'=>$itemCat,
             'dataProvider' => new CActiveDataProvider('Feedbacks',array(
                 'criteria'=>array(
-                    'condition'=>'product_id='.$id,
+                    'condition'=>'`product_id`='.$id.' AND `approved`=1',
                     ),
                 )
             ),

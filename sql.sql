@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS `feedbacks` (
   `content` text NOT NULL,
   `rating` tinyint(2) DEFAULT NULL,
   `date_added` int(11) unsigned DEFAULT NULL,
-  `status` tinyint(1) NOT NULL,
+  `approved` tinyint(1) NOT NULL,
   `product_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `product_id` (`product_id`)

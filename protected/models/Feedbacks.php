@@ -14,10 +14,10 @@ class Feedbacks extends CActiveRecord
     {
         return array(
             array('country,nickname,content','required'),
-            array('rating, status','numerical','integerOnly' => true),
+            array('rating, approved','numerical','integerOnly' => true),
             array('nickname, country','length','max' => 48),
             array('verifyCode','captcha','allowEmpty'=>!CCaptcha::checkRequirements()),
-            array('content, country, nickname, rating, status','safe','on' => 'search')
+            array('content, country, nickname, rating, approved','safe','on' => 'search')
         );
     }
     public function relations()
@@ -32,7 +32,7 @@ class Feedbacks extends CActiveRecord
             'country' => 'Country',
             'nickname' => 'Nickname',
             'rating' => 'Rating',
-            'status' => 'Status',
+            'approved' => 'Approved',
             'verifyCode'=>'Verification Code',
             'date_added'=>'Added on',
         );
@@ -44,7 +44,7 @@ class Feedbacks extends CActiveRecord
         $criteria->compare('country', $this->country, true);
         $criteria->compare('nickname', $this->nickname, true);
         $criteria->compare('rating', $this->rating);
-        $criteria->compare('status', $this->status);
+        $criteria->compare('approved', $this->approved);
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria
         ));

@@ -27,8 +27,8 @@
     </div>
 
     <div class="row">
-        <?php echo $form->label($model, 'status'); ?>
-        <?php echo $form->textField($model, 'status'); ?>
+        <?php echo $form->label($model, 'approved'); ?>
+        <?php echo $form->textField($model, 'approved'); ?>
     </div>
 
     <div class="row buttons">
