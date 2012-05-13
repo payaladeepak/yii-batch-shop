@@ -4,17 +4,6 @@ class Products extends CActiveRecord {
     public static function model($className=__CLASS__) {
         return parent::model($className);
     }
-    public static function getDataProvider($pageSize=50,$condition=null,$with=null,$order=null,$limit=null) {
-        $c=($condition==null?'':$condition);
-        return new CActiveDataProvider(self::model(),array('criteria'=>array(
-            'condition'=>$c,
-            'with'=>$with,
-            'order'=>$order,
-            'limit'=>$limit,
-        ),'pagination'=>array(
-            'pageSize'=>$pageSize,
-        )));
-    }
     public function tableName() {
         return 'products';
     }

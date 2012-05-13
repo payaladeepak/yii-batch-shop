@@ -17,10 +17,13 @@ class SiteController extends Controller
         Yii::app()->clientScript->registerCssFile(Yii::app()->getBaseUrl().'/css/menu.css');
         $this->registerAssets();
     }
-    public function actionIndex()
-    {
-        $dataSet=Products::getDataProvider(40,'','','date_added',40);
-        $dataSet->setPagination(false);
+    public function actionIndex() {
+        $dataSet=new CActiveDataProvider('Products',array('criteria'=>array(
+                        'order'=>'date_added',
+                    ),'pagination'=>array(
+                        'pageSize'=>40,
+                    )
+                ));
         $this->render('index',array('dataSet'=>$dataSet));
     }
     public function actionError()

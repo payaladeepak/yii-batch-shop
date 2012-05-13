@@ -38,7 +38,7 @@ class Controller extends CController {
             }
             echo CHtml::openTag('li',array('id'=>'node_'.$category->id,'rel'=>$category->name));
             if($id=='index') 
-                echo CHtml::openTag('a',array('href'=>$this->createUrl('/products',array('id'=>$category->id.'-'.$category->name))));
+                echo CHtml::openTag('a',array('href'=>$this->createUrl('/products',array('id'=>$category->id,'title'=>$category->name))));
             else 
                 echo CHtml::openTag('a',array('href'=>'#'));
             echo CHtml::encode($category->name);
@@ -57,15 +57,15 @@ class Controller extends CController {
                 $b[]=$value->attributes;
             }
             foreach($b as $value) {
-                $this->breadcrumbs[$value['name']]=$this->createUrl('/products/'.$value['id'].'-'.$value['name']);
+                $this->breadcrumbs[$value['name']]=$this->createUrl('/products',array('id'=>$value['id'],'title'=>$value['name']));
             }
         }
         $p=array(
-            'Products'=>$this->createUrl('/products/index'),
+            'Products'=>$this->createUrl('products/random'),
         );
         $this->breadcrumbs=$p+$this->breadcrumbs;
         if(!empty($menu_id)) 
-            $this->breadcrumbs[$model->name]=$this->createUrl('/products/'.$menu_id.'-'.$model->name);
+            $this->breadcrumbs[$model->name]=$this->createUrl('/products',array('id'=>$menu_id,'title'=>$model->name));
         else 
             array_push($this->breadcrumbs,$model->name);
     }

@@ -18,7 +18,7 @@ class ProductsController extends Controller {
     }
     public function accessRules() {
         return array(
-            array('allow','actions'=>array('index','details','search','captcha'),'users'=>array('*')),
+            array('allow','actions'=>array('index','details','search','captcha','random'),'users'=>array('*')),
             array('allow','users'=>array('admin')),
             array('deny','users'=>array('*')),
             );
@@ -153,20 +153,26 @@ class ProductsController extends Controller {
             $this->model->setScenario($scenario);
     }
     public function actionIndex($id='index') {
-        if($id!='index') {
-            $id=explode('-',$id);
-            $dataSet=Products::getDataProvider(50,'menu_id='.$id[0]);
-            $menu=Menu::model()->findByPk($id[0]);
+            $dataSet=new CActiveDataProvider('Products',array('criteria'=>array(
+                            'condition'=>'menu_id='.$id,
+                        ),'pagination'=>array(
+                            'pageSize'=>50,
+                            )));
+            $menu=Menu::model()->findByPk($id);
             $this->_loadBreadcrumbs($menu);
-            $this->render('list',array('dataSet'=>$dataSet,'title'=>$menu->name));
-        }
-        else {
-            $dataSet=Products::getDataProvider(50,'','',new CDbExpression('RAND()'),50);
-            $dataSet->setPagination(false);
-            $this->render('index',array('dataSet'=>$dataSet));
-        }
+            $this->render('index',array('dataSet'=>$dataSet,'title'=>$menu->name));
+    }
+    public function actionRandom() {
+        // Page with random products
+            $dataSet=new CActiveDataProvider('Products',array('criteria'=>array(
+                            'order'=>new CDbExpression('RAND()'),
+                            'limit'=>50,
+                        ),'pagination'=>false
+                    ));
+            $this->render('random',array('dataSet'=>$dataSet));
     }
     public function actionDetails($id) {
+     //   print_r($id);exit;
         $feedbacks = new Feedbacks;
         if (isset($_POST['Feedbacks'])) {
             $feedbacks->setAttributes($_POST['Feedbacks']);
