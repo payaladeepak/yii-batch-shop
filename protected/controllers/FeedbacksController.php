@@ -55,12 +55,11 @@ class FeedbacksController extends Controller {
 
     public function actionToggle($id,$attribute) {
         if (Yii::app()->request->isPostRequest) {
-            // we only allow deletion via POST request
             $model=$this->loadModel($id);
             $model->$attribute=($model->$attribute==0) ? 1 : 0;
             $model->save(false);
 
-            // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+            // if AJAX request, we should not redirect the browser
             if (!isset($_GET['ajax']))
                 $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
         }

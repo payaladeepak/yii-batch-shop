@@ -50,16 +50,16 @@ $this->widget('zii.widgets.grid.CGridView',array(
         array(
             'class'=>'CButtonColumn',
             'buttons'=>array(
-                'productPage'=>array(
+            /*    'productPage'=>array(
                     'label'=>'Go to product page',// text label of the button
                     'url'=>$this->createUrl('products/details',array('id'=>'')),// a PHP expression for generating the URL of the button
                     'imageUrl'=>'...',// image URL of the button. If not set or false, a text link is used
                     'options'=>array(),// HTML options for the button tag
                     'click'=>'...',// a JS function to be invoked when the button is clicked
                     'visible'=>'...',// a PHP expression for determining whether the button is visible
-                )
+                )*/
             ),
-            'template'=>'{productPage}{delete}',
+            'template'=>'{delete}',
         ),
     ),
 ));
