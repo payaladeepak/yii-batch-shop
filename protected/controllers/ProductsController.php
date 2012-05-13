@@ -23,18 +23,6 @@ class ProductsController extends Controller {
             array('deny','users'=>array('*')),
             );
     }
-    public function actions()
-    {
-        return array(
-            'captcha' => array(
-                'class' => 'CCaptchaAction',
-                'backColor' => 0xF7F7F7
-            ),
-            'page' => array(
-                'class' => 'CViewAction'
-            )
-        );
-    }
     public function missingAction($id) {
         $this->actionIndex($id);
     }
@@ -172,7 +160,6 @@ class ProductsController extends Controller {
             $this->render('random',array('dataSet'=>$dataSet));
     }
     public function actionDetails($id) {
-     //   print_r($id);exit;
         $feedbacks = new Feedbacks;
         if (isset($_POST['Feedbacks'])) {
             $feedbacks->setAttributes($_POST['Feedbacks']);
@@ -181,7 +168,17 @@ class ProductsController extends Controller {
                 $feedbacks->product_id=$id;
                 $feedbacks->save(false);
                 Yii::app()->user->setFlash('feedback', 'Your feedback was received, it will be visible once it is approved.');
-           //     print_r(Yii::app()->user->getFlash('feedback'));exit;
+                
+                // Notify admin by email
+                Yii::app()->mailer->AddAddress(Yii::app()->params['adminEmail']);
+                Yii::app()->mailer->From=Yii::app()->params['adminEmail'];
+                Yii::app()->mailer->Subject=Yii::app()->name.' - New feedback received';
+                Yii::app()->mailer->MsgHTML(
+                        'A new feedback was received, you\'ll have to approve it to enable its display<br/>
+                        <a href"'.Yii::app()->request->hostInfo.Yii::app()->request->requestUri.'">Click here</a> to quickly jump to the product page.'
+                        );
+                Yii::app()->mailer->Send();
+                Yii::app()->user->setFlash('contact','Thank you for contacting us. We will respond to you as soon as possible.');
                 $this->refresh();
             }
         }
