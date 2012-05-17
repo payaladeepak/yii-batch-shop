@@ -7,13 +7,31 @@ $this->breadcrumbs = array(
 $this->menu=array(
 	array('label'=>'Back', 'url'=>array('/site/index')),
 	array('label'=>'List Products', 'url'=>array('admin')),
-	array('label'=>'Create Products', 'url'=>array('create')),
+	array('label'=>'Create Products', 'url'=>array('add')),
 );
 ?>
 
-<h1>Batch Create Products</h1>
+<h1>Create Products</h1>
 <?php if (empty($listData)): ?>
     <div style="color:red;"><p>Please create a menu category first</p></div>
 <?php else: ?>
-    <?php echo $this->renderPartial('_form', array('listData' => $listData)); ?>
+    <?php $this->widget('CTabView',array(
+    'cssFile'=>'/css/tabs.css',
+    'activeTab'=>(Yii::app()->request->isPostRequest&&$_POST['activeTab']=='batch-add'?'tab2':'tab1'),
+    'tabs'=>array(
+        'tab1'=>array(
+            'title'=>'Add a product',
+            'view'=>'_add',
+            'data'=>array(
+                'listData'=>$listData,
+            ),
+        ),
+        'tab2'=>array(
+            'title'=>'Batch additions',
+            'view'=>'_batch-add',
+            'data'=>array(
+                'listData'=>$listData,
+            ),
+        ),
+))); ?>
 <?php endif; ?>

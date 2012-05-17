@@ -6,7 +6,7 @@ $this->breadcrumbs=array(
 $this->menu=array(
 	array('label'=>'Back', 'url'=>array('/site/index')),
 	array('label'=>'List Products', 'url'=>array('admin')),
-	array('label'=>'Create Products', 'url'=>array('create')),
+	array('label'=>'Create Products', 'url'=>array('add')),
 );
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
