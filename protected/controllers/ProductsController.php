@@ -87,30 +87,12 @@ class ProductsController extends Controller {
             $this->_buildTree($this->imgDir);
             $this->_buildTree($this->thumbsDir);
             $this->_buildTree($this->uploadDir);
-            $zipList=$this->_zipList($this->uploadDir);
-            if (empty($zipList)) {
-                $this->model->addError('title','No zip file was uploaded');
+            $files=CFileHelper::findFiles($this->uploadDir);
+            if (empty($files)) {
+                $this->model->addError('title','No file was uploaded');
                 $this->render('create',array('listData'=>$this->_selectList()));
             }
-            $this->_buildTree($this->unzippedDir);
-            $zip=new ZipArchive;
-            foreach ($zipList as $value) {
-                if ($zip->open($value)===true) {
-                    $zip->extractTo($this->unzippedDir);
-                    $zip->close();
-                } else {
-                    $this->model->addError('title','There was an error when trying to unzip');
-                    $this->render('create',array('listData'=>$this->_selectList()));
-                }
-            }
-            $fileList=CFileHelper::findFiles($this->unzippedDir);
-            $c=count($fileList)-1;
-            while ($c!=-1) {
-                $ext=CFileHelper::getExtension($fileList[$c]);
-                $newFileName=$this->_newFileName($ext);
-                $this->_save($newFileName,$fileList[$c],$ext);
-                $c--;
-            }
+            $this->_processFiles($this->uploadDir);
             $this->_emptyDir($this->uploadDir);
             $this->redirect('admin');
         } else {
@@ -265,16 +247,7 @@ class ProductsController extends Controller {
         }
         return true;
     }
-    private function _zipList($path) {
-        $files=CFileHelper::findFiles($path);
-        $zipList=array();
-        foreach ($files as $value) {
-            if (CFileHelper::getMimeType($value)!='application/zip')
-                continue;
-            $zipList[]=$value;
-        }
-        return $zipList;
-    }
+
     private function _dirList($dir) {
         // remove ending slash
         $dir=(substr($dir,-1)==DIRECTORY_SEPARATOR ? substr($dir,0,-1) : $dir);
@@ -350,6 +323,31 @@ class ProductsController extends Controller {
         return $listData;
     }
 
+    private function _processFiles($path) {
+        $fileList=CFileHelper::findFiles($path);
+        $c=count($fileList)-1;
+        while ($c!=-1) {
+            if (CFileHelper::getMimeType($fileList[$c])=='application/zip')
+                $this->_processZip($fileList[$c]);
+            $ext=CFileHelper::getExtension($fileList[$c]);
+            $newFileName=$this->_newFileName($ext);
+            $this->_save($newFileName,$fileList[$c],$ext);
+            $c--;
+        }
+        return true;
+    }
+    
+    private function _processZip($file) {
+        $this->_buildTree($this->unzippedDir);
+        $zip=new ZipArchive;
+        if ($zip->open($file)===true) {
+            $zip->extractTo($this->unzippedDir);
+            $zip->close();
+            return true;
+        }
+        return false;
+    }
+    
     private function _save($newFileName,$fullPath,$ext,$zipFile=true) {
         if ($zipFile==true)
             if (!$this->_isAllowedImage($fullPath))
