@@ -2,6 +2,7 @@
 
 class ProductsController extends Controller {
 
+    public $defaultAction='random';
     public $allowedImages=array(
         'image/gif',
         'image/jpeg',
@@ -9,16 +10,16 @@ class ProductsController extends Controller {
         'image/png',
     );
     public $thumbWidth=150;
-    public $thumbHeight,$imgDir,$thumbsDir,$uploadDir,$unzippedDir,$model;
+    public $thumbHeight,$imgDir,$thumbsDir,$uploadDir,$unzippedDir,$zip,$model;
 
     public function init() {
-        $this->uploadDir=Yii::app()->getBasePath().'/../'.Yii::app()->params['directories']['upload'];
-        $this->unzippedDir=Yii::app()->getBasePath().'/../'.Yii::app()->params['directories']['unzipped'];
-        $this->imgDir=Yii::app()->getBasePath().'/../'.Yii::app()->params['directories']['images'];
-        $this->thumbsDir=Yii::app()->getBasePath().'/../'.Yii::app()->params['directories']['thumbnails'];
+        $this->uploadDir=Yii::getPathOfAlias('webroot').DIRECTORY_SEPARATOR.Yii::app()->params['directories']['upload'];
+        $this->unzippedDir=Yii::getPathOfAlias('webroot').DIRECTORY_SEPARATOR.Yii::app()->params['directories']['unzipped'];
+        $this->imgDir=Yii::getPathOfAlias('webroot').DIRECTORY_SEPARATOR.Yii::app()->params['directories']['images'];
+        $this->thumbsDir=Yii::getPathOfAlias('webroot').DIRECTORY_SEPARATOR.Yii::app()->params['directories']['thumbnails'];
 
         if (Yii::app()->user->isGuest)
-            Yii::app()->clientScript->registerCssFile(Yii::app()->getBaseUrl().'/css/menu.css');
+            Yii::app()->clientScript->registerCssFile(Yii::app()->getBaseUrl().DIRECTORY_SEPARATOR.'css'.DIRECTORY_SEPARATOR.'menu.css');
     }
 
     public function filters() {
@@ -33,8 +34,8 @@ class ProductsController extends Controller {
         );
     }
 
-    public function missingAction($id) {
-        $this->actionIndex($id);
+    public function missingAction() {
+        $this->actionRandom();
     }
 
     public function actionSearch() {
@@ -57,9 +58,9 @@ class ProductsController extends Controller {
         if (Yii::app()->request->isPostRequest) {
             $this->model->setAttributes($_POST['Products']);
             if ($this->model->validate()) {
-                $this->_buildTree($this->imgDir);
-                $this->_buildTree($this->thumbsDir);
-                $this->_buildTree($this->uploadDir);
+                $this->_buildPath($this->imgDir);
+                $this->_buildPath($this->thumbsDir);
+                $this->_buildPath($this->uploadDir);
                 $uploadedFile=CUploadedFile::getInstance($this->model,'title');
                 $fullPath=$this->uploadDir.DIRECTORY_SEPARATOR.$uploadedFile->getName();
                 $ext=CFileHelper::getExtension($fullPath);
@@ -73,7 +74,7 @@ class ProductsController extends Controller {
                 $this->_emptyDir($this->uploadDir);
                 $this->redirect('admin');
             } else {
-            $this->render('create',array('listData'=>$this->_selectList()));
+                $this->render('create',array('listData'=>$this->_selectList()));
             }
         } else {
             $this->_emptyDir($this->uploadDir);
@@ -86,14 +87,14 @@ class ProductsController extends Controller {
         $this->model->options=Yii::app()->params['defaultOptions'];
         if (Yii::app()->request->isPostRequest) {
             $this->model->setAttributes($_POST['Products']);
-            $this->_buildTree($this->imgDir);
-            $this->_buildTree($this->thumbsDir);
-            $this->_buildTree($this->uploadDir);
-            $files=CFileHelper::findFiles($this->uploadDir);
-            if (empty($files)) {
-                $this->model->addError('title','No file was uploaded');
+            $this->model->uploadDir=$this->uploadDir;
+            if (!$this->model->validate()) {
                 $this->render('create',array('listData'=>$this->_selectList()));
+                Yii::app()->end();
             }
+            $this->_buildPath($this->imgDir);
+            $this->_buildPath($this->thumbsDir);
+            $this->_buildPath($this->unzippedDir);
             $this->_processFiles($this->uploadDir);
             $this->_emptyDir($this->uploadDir);
             $this->redirect('admin');
@@ -155,7 +156,7 @@ class ProductsController extends Controller {
             $this->model->setScenario($scenario);
     }
 
-    public function actionIndex($id='index') {
+    public function actionIndex($id) {
         $dataSet=new CActiveDataProvider('Products',array('criteria'=>array(
                         'condition'=>'menu_id='.$id,
                     ),'pagination'=>array(
@@ -239,7 +240,7 @@ class ProductsController extends Controller {
         }
     }
 
-    private function _buildTree($dir) {
+    private function _buildPath($dir) {
         if (file_exists($dir)||empty($dir))
             return false;
         $array=$this->_dirList($dir);
@@ -327,7 +328,6 @@ class ProductsController extends Controller {
     }
 
     private function _processFiles($path) {
-        $this->_buildTree($this->unzippedDir);
         $fileList=CFileHelper::findFiles($path);
         $c=count($fileList)-1;
         while ($c!=-1) {
@@ -335,8 +335,11 @@ class ProductsController extends Controller {
             if (CFileHelper::getMimeType($fileList[$c])=='application/zip') {
                 $path=$this->_processZip($fileList[$c]);
                 // If successfull zip extraction, process the new extracted files
-                if ($path!=false)
+                if ($path!=false) {
+                    print_r($path);exit;
                     $this->_processFiles($path);
+                }
+                // else skip that zip file
                 continue;
             }
             $ext=CFileHelper::getExtension($fileList[$c]);
@@ -348,18 +351,19 @@ class ProductsController extends Controller {
     }
     
     private function _processZip($file) {
-        $zip=new ZipArchive;
+        if (empty($this->zip))
+            $this->zip=new ZipArchive;
        // $subdir=$this->_newSubDir($this->unzippedDir);
-        if ($zip->open($file)===true) {
+        if ($this->zip->open($file)===true) {
        /*     while (true) {
                 if ($this->_isEmptyPath())
                     break;
                 else
                     $subdir=$this->_newSubDir($path);
             }*/
-            $extractTo=($this->_newSubDir($this->unzippedDir));
-            $zip->extractTo($extractTo);
-            $zip->close();
+            $extractTo=$this->_newSubDir($this->unzippedDir);
+            $this->zip->extractTo($extractTo);
+            $this->zip->close();
             return $extractTo;
         }
         return false;
@@ -453,14 +457,16 @@ class ProductsController extends Controller {
     }
 
     public function actionUploadResponse() {
+        $this->_buildPath($this->uploadDir);
         Yii::import("ext.EAjaxUpload.qqFileUploader");
-        $allowedExtensions=array('jpg','jpeg','png','gif','zip');
-        $sizeLimit=10*1024*1024;
+        $allowedExtensions=array_merge(Yii::app()->params['allowedTypes'],array('zip'));
+        $sizeLimit=Yii::app()->params['maxUploadSize'];
         $uploader=new qqFileUploader($allowedExtensions,$sizeLimit);
         $result=$uploader->handleUpload($this->uploadDir.DIRECTORY_SEPARATOR);
         $return=htmlspecialchars(json_encode($result),ENT_NOQUOTES);
-        $fileSize=filesize($this->uploadDir.DIRECTORY_SEPARATOR.$result['filename']);
-        $fileName=$result['filename'];
+        // optional
+    //  $fileSize=filesize($this->uploadDir.DIRECTORY_SEPARATOR.$result['filename']);
+    //  $fileName=$result['filename'];
         echo $return;
     }
 

@@ -2,7 +2,7 @@
 
 class Products extends CActiveRecord {
 
-    public $options,$menu_search;
+    public $options,$menu_search,$uploadDir;
 
     public static function model($className=__CLASS__) {
         return parent::model($className);
@@ -15,13 +15,20 @@ class Products extends CActiveRecord {
     public function rules() {
         return array(
             array('title','file','on'=>'add','allowEmpty'=>false,'types'=>Yii::app()->params['allowedTypes'],'wrongType'=>'Wrong file type !','minSize'=>Yii::app()->params['minUploadSize'],'tooSmall'=>'File is too small !','maxSize'=>Yii::app()->params['maxUploadSize']),
-            array('title','file','on'=>'batch-add','allowEmpty'=>false,'types'=>array_merge(Yii::app()->params['allowedTypes'],array('zip')),'wrongType'=>'Wrong file type !','minSize'=>Yii::app()->params['minUploadSize'],'tooSmall'=>'File is too small !','maxSize'=>Yii::app()->params['maxUploadSize']),
+           // array('title','file','on'=>'batch-add','allowEmpty'=>false,'types'=>array_merge(Yii::app()->params['allowedTypes'],array('zip')),'wrongType'=>'Wrong file type !','minSize'=>Yii::app()->params['minUploadSize'],'tooSmall'=>'File is too small !','maxSize'=>Yii::app()->params['maxUploadSize']),
+            array('title','uploaded','on'=>'batch-add'),
             array('price, menu_id','numerical','integerOnly'=>true),
             array('price,menu_id','required'),
             array('options,image_url,thumb_url,date_added','safe'),
             array('title,menu_search','safe','on'=>'search'),
             array('title,price,menu_id','required','on'=>'update'),
         );
+    }
+
+    public function uploaded() {
+        $files=CFileHelper::findFiles($this->uploadDir);
+        if (empty($files))
+            $this->addError('title','No file was uploaded');
     }
 
     public function relations() {
