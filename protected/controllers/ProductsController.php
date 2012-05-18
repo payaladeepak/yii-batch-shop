@@ -336,11 +336,12 @@ class ProductsController extends Controller {
                 $path=$this->_processZip($fileList[$c]);
                 // If successfull zip extraction, process the new extracted files
                 if ($path!=false) {
-                    print_r($path);exit;
+                //    print_r($path);exit;
+                   
                     $this->_processFiles($path);
+                    continue;
                 }
-                // else skip that zip file
-                continue;
+                
             }
             $ext=CFileHelper::getExtension($fileList[$c]);
             $newFileName=$this->_newFileName($ext);
@@ -356,7 +357,7 @@ class ProductsController extends Controller {
        // $subdir=$this->_newSubDir($this->unzippedDir);
         if ($this->zip->open($file)===true) {
        /*     while (true) {
-                if ($this->_isEmptyPath())
+                if ($this->_isEmptyDir())
                     break;
                 else
                     $subdir=$this->_newSubDir($path);
@@ -381,7 +382,7 @@ class ProductsController extends Controller {
         return $subdir;
     }
 
-    private function _isEmptyPath($path) {
+    private function _isEmptyDir($path) {
         $files=scandir($path);
         if ($files!=false&&(count($files)>2)) {
             return false;
@@ -390,9 +391,10 @@ class ProductsController extends Controller {
     }
     
     private function _save($newFileName,$fullPath,$ext,$zipFile=true) {
-        if ($zipFile==true)
-            if (!$this->_isAllowedImage($fullPath))
+        if ($zipFile==true) {
+            if (!$this->model->validate('extension'))
                 return false;
+        }
         $e=end(explode(DIRECTORY_SEPARATOR,$fullPath));
         $title=substr($e,0,((strlen($e)-strlen($ext))-1));
         rename($fullPath,$this->imgDir.DIRECTORY_SEPARATOR.$newFileName);
@@ -447,13 +449,6 @@ class ProductsController extends Controller {
             }
         }
         return $newFileName;
-    }
-
-    private function _isAllowedImage($pathToFile) {
-        $fileType=CFileHelper::getMimeType($pathToFile);
-        if (in_array($fileType,$this->allowedImages))
-            return true;
-        return false;
     }
 
     public function actionUploadResponse() {

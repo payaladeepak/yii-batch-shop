@@ -67,13 +67,23 @@ float:left;
 padding:26px 20px;
 }
 
-#header .nav li a:hover,#header .nav li.current {
+#header .nav li a:hover {
 color:#d60c0c;
 background:no-repeat 0 0;
 background-image:url('../images/nav-left.gif');
 }
 
-#header .nav li a:hover span,#header .nav li a.current span {
+#header .nav li.current {
+color:#d60c0c;
+background:no-repeat 0 0;
+background-image:url('../images/nav-left.gif');
+}
+
+#header .nav li a:hover span {
+background:no-repeat 100% 0;
+background-image:url('../images/nav-right.gif');
+}
+#header .nav li.current a span {
 background:no-repeat 100% 0;
 background-image:url('../images/nav-right.gif');
 }
