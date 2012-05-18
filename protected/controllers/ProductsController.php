@@ -57,24 +57,26 @@ class ProductsController extends Controller {
         if (Yii::app()->request->isPostRequest) {
             $this->model->setAttributes($_POST['Products']);
             if ($this->model->validate()) {
-                $uploadedFile=CUploadedFile::getInstance($this->model,'title');
                 $this->_buildTree($this->imgDir);
                 $this->_buildTree($this->thumbsDir);
                 $this->_buildTree($this->uploadDir);
+                $uploadedFile=CUploadedFile::getInstance($this->model,'title');
                 $fullPath=$this->uploadDir.'/'.$uploadedFile->getName();
                 $ext=CFileHelper::getExtension($fullPath);
                 $newFileName=$this->_newFileName($ext);
                 if ($uploadedFile->saveAs($fullPath)===true) {
                     $this->_save($newFileName,$fullPath,$ext,false);
                 } else {
-                    $this->model->addError('title','There was an error when trying to upload');
+                    $this->model->addError('title','There was an error while trying to upload');
                     $this->render('create',array('listData'=>$this->_selectList()));
                 }
                 $this->_emptyDir($this->uploadDir);
                 $this->redirect('admin');
-            }
+            } else {
             $this->render('create',array('listData'=>$this->_selectList()));
+            }
         } else {
+            $this->_emptyDir($this->uploadDir);
             $this->render('create',array('listData'=>$this->_selectList()));
         }
     }
@@ -96,6 +98,7 @@ class ProductsController extends Controller {
             $this->_emptyDir($this->uploadDir);
             $this->redirect('admin');
         } else {
+            $this->_emptyDir($this->uploadDir);
             $this->render('create',array('listData'=>$this->_selectList()));
         }
     }
@@ -183,7 +186,7 @@ class ProductsController extends Controller {
                 $feedbacks->product_id=$id;
                 $feedbacks->save(false);
 
-                // Notify admin by email
+                // Notify admin via email
                 Yii::app()->mailer->AddAddress(Yii::app()->params['adminEmail']);
                 Yii::app()->mailer->From=Yii::app()->params['adminEmail'];
                 Yii::app()->mailer->Subject=Yii::app()->name.' - A new feedback was received';
@@ -324,6 +327,7 @@ class ProductsController extends Controller {
     }
 
     private function _processFiles($path) {
+        $this->_buildTree($this->unzippedDir);
         $fileList=CFileHelper::findFiles($path);
         $c=count($fileList)-1;
         while ($c!=-1) {
@@ -338,7 +342,6 @@ class ProductsController extends Controller {
     }
     
     private function _processZip($file) {
-        $this->_buildTree($this->unzippedDir);
         $zip=new ZipArchive;
         if ($zip->open($file)===true) {
             $zip->extractTo($this->unzippedDir);
