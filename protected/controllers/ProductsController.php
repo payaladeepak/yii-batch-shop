@@ -61,7 +61,7 @@ class ProductsController extends Controller {
                 $this->_buildTree($this->thumbsDir);
                 $this->_buildTree($this->uploadDir);
                 $uploadedFile=CUploadedFile::getInstance($this->model,'title');
-                $fullPath=$this->uploadDir.'/'.$uploadedFile->getName();
+                $fullPath=$this->uploadDir.DIRECTORY_SEPARATOR.$uploadedFile->getName();
                 $ext=CFileHelper::getExtension($fullPath);
                 $newFileName=$this->_newFileName($ext);
                 if ($uploadedFile->saveAs($fullPath)===true) {
@@ -229,7 +229,7 @@ class ProductsController extends Controller {
     private function _itemCat($breadcrumbs) {
         $arr=array_keys($breadcrumbs);
         array_shift($arr);
-        return implode('/',$arr);
+        return implode(DIRECTORY_SEPARATOR,$arr);
     }
 
     private function performAjaxValidation($model) {
@@ -331,8 +331,14 @@ class ProductsController extends Controller {
         $fileList=CFileHelper::findFiles($path);
         $c=count($fileList)-1;
         while ($c!=-1) {
-            if (CFileHelper::getMimeType($fileList[$c])=='application/zip')
-                $this->_processZip($fileList[$c]);
+            // if the uploaded zip file contains another zip file, extract it to a new subdir and process it
+            if (CFileHelper::getMimeType($fileList[$c])=='application/zip') {
+                $path=$this->_processZip($fileList[$c]);
+                // If successfull zip extraction, process the new extracted files
+                if ($path!=false)
+                    $this->_processFiles($path);
+                continue;
+            }
             $ext=CFileHelper::getExtension($fileList[$c]);
             $newFileName=$this->_newFileName($ext);
             $this->_save($newFileName,$fileList[$c],$ext);
@@ -343,29 +349,57 @@ class ProductsController extends Controller {
     
     private function _processZip($file) {
         $zip=new ZipArchive;
+       // $subdir=$this->_newSubDir($this->unzippedDir);
         if ($zip->open($file)===true) {
-            $zip->extractTo($this->unzippedDir);
+       /*     while (true) {
+                if ($this->_isEmptyPath())
+                    break;
+                else
+                    $subdir=$this->_newSubDir($path);
+            }*/
+            $extractTo=($this->_newSubDir($this->unzippedDir));
+            $zip->extractTo($extractTo);
             $zip->close();
-            return true;
+            return $extractTo;
         }
         return false;
+    }
+
+    private function _newSubDir($path) {
+        while (true) {
+            $str=$this->_randomString(10,'',array('alphaSmall'=>true,'alphaBig'=>false,'num'=>true,'othr'=>false));
+            $subdir=$path.DIRECTORY_SEPARATOR.$str.DIRECTORY_SEPARATOR;
+            if (file_exists($subdir))
+                continue;
+            mkdir($subdir);
+            break;
+        }
+        return $subdir;
+    }
+
+    private function _isEmptyPath($path) {
+        $files=scandir($path);
+        if ($files!=false&&(count($files)>2)) {
+            return false;
+        }
+        return true;
     }
     
     private function _save($newFileName,$fullPath,$ext,$zipFile=true) {
         if ($zipFile==true)
             if (!$this->_isAllowedImage($fullPath))
                 return false;
-        $e=end(explode('/',$fullPath));
+        $e=end(explode(DIRECTORY_SEPARATOR,$fullPath));
         $title=substr($e,0,((strlen($e)-strlen($ext))-1));
-        rename($fullPath,$this->imgDir.'/'.$newFileName);
-        $this->_thumbnail($this->imgDir.'/'.$newFileName,$this->thumbsDir.'/'.$newFileName);
+        rename($fullPath,$this->imgDir.DIRECTORY_SEPARATOR.$newFileName);
+        $this->_thumbnail($this->imgDir.DIRECTORY_SEPARATOR.$newFileName,$this->thumbsDir.DIRECTORY_SEPARATOR.$newFileName);
         $time=time();
         $this->model->setIsNewRecord(true);
         $this->model->setPrimaryKey(NULL);
         $this->model->setAttributes(array(
             'title'=>$title,
-            'image_url'=>'/'.Yii::app()->params['directories']['images'].'/'.$newFileName,
-            'thumb_url'=>'/'.Yii::app()->params['directories']['thumbnails'].'/'.$newFileName,
+            'image_url'=>DIRECTORY_SEPARATOR.Yii::app()->params['directories']['images'].DIRECTORY_SEPARATOR.$newFileName,
+            'thumb_url'=>DIRECTORY_SEPARATOR.Yii::app()->params['directories']['thumbnails'].DIRECTORY_SEPARATOR.$newFileName,
             'date_added'=>$time,
         ));
         $this->model->save(false);
@@ -389,8 +423,8 @@ class ProductsController extends Controller {
         while (false!==($obj=readdir($dh))) {
             if ($obj=='.'||$obj=='..')
                 continue;
-            if (!@unlink($dir.'/'.$obj))
-                $this->_emptyDir($dir.'/'.$obj,true);
+            if (!@unlink($dir.DIRECTORY_SEPARATOR.$obj))
+                $this->_emptyDir($dir.DIRECTORY_SEPARATOR.$obj,true);
         }
         closedir($dh);
         if ($DeleteMe) {
@@ -402,7 +436,7 @@ class ProductsController extends Controller {
         while (true) {
             $str=$this->_randomString(10,'',array('alphaSmall'=>true,'alphaBig'=>false,'num'=>true,'othr'=>false));
             $newFileName=$str.'.'.$ext;
-            if (!file_exists($this->imgDir.'/'.$newFileName)) {
+            if (!file_exists($this->imgDir.DIRECTORY_SEPARATOR.$newFileName)) {
                 break;
             } else {
                 continue;
