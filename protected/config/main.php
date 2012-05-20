@@ -83,6 +83,7 @@ return array(
         // Image vars 
         'previewMaxWidth'=>'30',// in percentages
         'maxWidth'=>'600',// products/details page (in px)
+        'thumbnailWidth'=>150,// for thumbnail creation (in px)
         // Directories (from root path)
         'directories'=>array(
             'upload'=>'upload',
