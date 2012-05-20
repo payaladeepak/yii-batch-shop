@@ -100,7 +100,7 @@ class ProductsController extends Controller {
     }
     
     public function actionUpdate($id) {
-        $this->loadModel($id,'update');
+        $this->loadModel($id,'','update');
         Yii::app()->session->add('item',$this->model->getAttribute('title'));
         if (Yii::app()->request->getPost('Products')) {
             $this->model->setAttributes($_POST['Products']);
@@ -140,14 +140,14 @@ class ProductsController extends Controller {
             throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
     }
 
-    protected function loadModel($id,$scenario=null,$with=null) {
-        if (!is_null($with))
+    protected function loadModel($id,$with=null,$scenario=null) {
+        if (!empty($with))
             $this->model=Products::model()->with($with)->findByPk($id);
         else
             $this->model=Products::model()->findByPk($id);
         if ($this->model===null)
             throw new CHttpException(404,'The requested page does not exist.');
-        if (!is_null($scenario))
+        if (!empty($scenario))
             $this->model->setScenario($scenario);
     }
 
@@ -174,14 +174,13 @@ class ProductsController extends Controller {
 
     public function actionDetails($id) {
         // if (Yii::app()->user->hasFlash('feedback')) {echo 'gdfgdfgd';exit;}
+        $this->loadModel($id);
         $feedbacks=new Feedbacks;
         if (isset($_POST['Feedbacks'])) {
             $feedbacks->setAttributes($_POST['Feedbacks']);
-            if ($feedbacks->validate()) {
-                $feedbacks->date_added=time();
-                $feedbacks->product_id=$id;
-                $feedbacks->save(false);
-
+            $feedbacks->date_added=time();
+            $feedbacks->product_id=$id;
+            if ($feedbacks->save()) {
                 // Notify admin via email
                 Yii::app()->mailer->AddAddress(Yii::app()->params['adminEmail']);
                 Yii::app()->mailer->From=Yii::app()->params['adminEmail'];
@@ -191,11 +190,11 @@ class ProductsController extends Controller {
                         <a href"'.Yii::app()->request->hostInfo.Yii::app()->request->requestUri.'">Click here</a> to quickly jump to the product page.'
                 );
                 Yii::app()->mailer->Send();
+            
+                Yii::app()->user->setFlash('feedback','Your feedback was received, it will be visible once it is approved.');
+                $this->refresh(); 
             }
-            Yii::app()->user->setFlash('feedback','Your feedback was received, it will be visible once it is approved.');
-            $this->refresh();
         }
-        $this->loadModel($id);
         $options=explode("\n",$this->model->options);
         $this->_loadBreadcrumbs($this->model->menu,$this->model->menu->id);
         $itemCat=$this->_itemCat($this->breadcrumbs);
@@ -205,7 +204,7 @@ class ProductsController extends Controller {
             'itemCat'=>$itemCat,
             'dataProvider'=>new CActiveDataProvider('Feedbacks',array(
                 'criteria'=>array(
-                    'condition'=>'`product_id`='.$id.' AND `approved`=1',
+                    'condition'=>'`product_id`='.$id.(Yii::app()->user->isGuest?' AND `approved`=1':''),
                 ),
                     )
             ),

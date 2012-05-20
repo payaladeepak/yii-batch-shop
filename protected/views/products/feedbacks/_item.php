@@ -1,10 +1,9 @@
 <div class="view" style="border:1px solid #BBBBBB;">
     <?php $this->widget('CStarRating',array(
-            //    'model'=>$data,
                 'attribute'=>'rating',
-                'name'=>'rating',
+                'name'=>'rating_'.$data->id,
                 'value'=>$data->rating,
-              //  'id'=>$data->id,
+                'id'=>'rating_'.$data->id,
                 'maxRating'=>5,
                 'readOnly'=>true,
                 )); ?><br />

@@ -9,9 +9,9 @@ CREATE TABLE IF NOT EXISTS `feedbacks` (
   `country` varchar(3) NOT NULL,
   `content` text NOT NULL,
   `rating` tinyint(2) DEFAULT NULL,
-  `date_added` int(11) unsigned DEFAULT NULL,
+  `date_added` int(11) unsigned NOT NULL,
   `approved` tinyint(1) NOT NULL,
-  `product_id` int(11) DEFAULT NULL,
+  `product_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `product_id` (`product_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
