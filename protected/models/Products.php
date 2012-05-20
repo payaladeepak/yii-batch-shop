@@ -88,9 +88,14 @@ class Products extends CActiveRecord {
 
     protected function afterDelete() {
         parent::afterDelete();
-        $rootPath=Yii::app()->getBasePath().'/..';
-        @unlink($rootPath.$this->thumb_url);
-        @unlink($rootPath.$this->image_url);
+        // Remove related feedbacks
+        $models=Feedbacks::model()->findAll('`product_id`='.$this->id);
+        foreach ($models as $model) {
+            $model->delete();
+        }
+        // Remove related pictures
+        @unlink(Yii::getPathOfAlias('webroot').DIRECTORY_SEPARATOR.$this->thumb_url);
+        @unlink(Yii::getPathOfAlias('webroot').DIRECTORY_SEPARATOR.$this->image_url);
     }
 
 }

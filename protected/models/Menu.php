@@ -91,7 +91,8 @@ class Menu extends CActiveRecord
 	}
     protected function afterDelete() {
         parent::afterDelete();
-        $models=Products::model()->findAll('',array(':menu_id' => $this->id));
+        // Remove related products
+        $models=Products::model()->findAll('`menu_id`='.$this->id);
         foreach ($models as $model) {
             $model->delete();
         }
