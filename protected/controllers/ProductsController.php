@@ -173,11 +173,10 @@ class ProductsController extends Controller {
     }
 
     public function actionDetails($id) {
-        // if (Yii::app()->user->hasFlash('feedback')) {echo 'gdfgdfgd';exit;}
         $this->loadModel($id);
         $feedbacks=new Feedbacks;
         if (isset($_POST['Feedbacks'])) {
-            $feedbacks->setAttributes($_POST['Feedbacks']);
+            $feedbacks->attributes=$_POST['Feedbacks'];
             $feedbacks->date_added=time();
             $feedbacks->product_id=$id;
             if ($feedbacks->save()) {
@@ -190,7 +189,6 @@ class ProductsController extends Controller {
                         <a href"'.Yii::app()->request->hostInfo.Yii::app()->request->requestUri.'">Click here</a> to quickly jump to the product page.'
                 );
                 Yii::app()->mailer->Send();
-            
                 Yii::app()->user->setFlash('feedback','Your feedback was received, it will be visible once it is approved.');
                 $this->refresh(); 
             }
