@@ -235,39 +235,8 @@ class ProductsController extends Controller {
     private function _buildPath($dir) {
         if (file_exists($dir)||empty($dir))
             return false;
-        $array=$this->_dirList($dir);
-        foreach ($array as $value) {
-            if (file_exists($value))
-                continue;
-            mkdir($value);
-        }
+        mkdir($dir,0777,true);
         return true;
-    }
-
-    private function _dirList($dir) {
-        // remove ending slash
-        $dir=(substr($dir,-1)==DIRECTORY_SEPARATOR ? substr($dir,0,-1) : $dir);
-        $isUnix=($dir[0]==DIRECTORY_SEPARATOR ? true : false);
-        $e=explode(DIRECTORY_SEPARATOR,$dir);
-        $c=count($e);
-        $list=array();
-        if ($isUnix) {
-            $list[0]=DIRECTORY_SEPARATOR;
-            for ($i=0; $i!=$c; $i++) {
-                if (empty($e[$i]))
-                    continue;
-                $list[$i]=$list[$i-1].$e[$i].DIRECTORY_SEPARATOR;
-            }
-        }
-        else {
-            for ($i=0; $i!=$c; $i++) {
-                if ($i==0)
-                    $list[$i]=$e[$i].DIRECTORY_SEPARATOR;
-                else
-                    $list[$i]=$list[$i-1].$e[$i].DIRECTORY_SEPARATOR;
-            }
-        }
-        return $list;
     }
 
     private function _randomString($length=10,$chars='',$type=array()) {
@@ -328,12 +297,8 @@ class ProductsController extends Controller {
                 $path=$this->_processZip($fileList[$c]);
                 // If successfull zip extraction, process the new extracted files
                 if ($path!=false) {
-                //    print_r($path);exit;
-                   
                     $this->_processFiles($path);
-                  //  continue;
                 }
-                
             }
             $ext=CFileHelper::getExtension($fileList[$c]);
             $newFileName=$this->_newFileName($ext);
@@ -347,14 +312,14 @@ class ProductsController extends Controller {
         if (empty($this->zip))
             $this->zip=new ZipArchive;
         if ($this->zip->open($file)===true) {
-            $extractTo=$this->_newSubDir($this->unzippedDir);
-            $this->zip->extractTo($extractTo);
+            $newSubDir=$this->_newSubDir($this->unzippedDir);
+            $this->zip->extractTo($newSubDir);
             $this->zip->close();
-            return $extractTo;
+            return $newSubDir;
         }
         return false;
     }
-
+    
     private function _newSubDir($path) {
         while (true) {
             $str=$this->_randomString(10,'',array('alphaSmall'=>true,'alphaBig'=>false,'num'=>true,'othr'=>false));
@@ -366,22 +331,18 @@ class ProductsController extends Controller {
         }
         return $subdir;
     }
-
-    private function _isEmptyDir($path) {
-        $files=scandir($path);
-        if ($files!=false&&(count($files)>2)) {
-            return false;
-        }
-        return true;
-    }
     
     private function _save($newFileName,$fullPath,$ext,$zipFile=true) {
+        // If zip file mode, skip unwanted files
         if ($zipFile==true)
             if (!in_array($ext,Yii::app()->params['allowedTypes']))
                 return false;
+        // Build the product title (filename without extension)
         $e=end(explode(DIRECTORY_SEPARATOR,$fullPath));
         $title=substr($e,0,((strlen($e)-strlen($ext))-1));
+        // Move original image
         rename($fullPath,$this->imgDir.DIRECTORY_SEPARATOR.$newFileName);
+        // Create its thumbnail
         $this->_thumbnail($this->imgDir.DIRECTORY_SEPARATOR.$newFileName,$this->thumbsDir.DIRECTORY_SEPARATOR.$newFileName);
         $time=time();
         $this->model->setIsNewRecord(true);
@@ -392,6 +353,7 @@ class ProductsController extends Controller {
             'thumb_url'=>DIRECTORY_SEPARATOR.Yii::app()->params['directories']['thumbnails'].DIRECTORY_SEPARATOR.$newFileName,
             'date_added'=>$time,
         ));
+        // Insert record to the database
         $this->model->save(false);
     }
 

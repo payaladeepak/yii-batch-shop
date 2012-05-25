@@ -28,7 +28,7 @@ class Products extends CActiveRecord {
     public function uploaded() {
         $files=CFileHelper::findFiles($this->uploadDir);
         if (empty($files))
-            $this->addError('title','No file was uploaded');
+            $this->addError('title','No files were uploaded.');
     }
     
     public function relations() {
@@ -63,27 +63,6 @@ class Products extends CActiveRecord {
                             '*',
                         ),
                     ),));
-    }
-
-    public function getReadableFileSize($retstring=null) {
-        // adapted from code at http://aidanlister.com/repos/v/function.size_readable.php
-        $sizes=array('bytes','kB','MB','GB','TB','PB','EB','ZB','YB');
-        if ($retstring===null) {
-            $retstring='%01.2f %s';
-        }
-        $lastsizestring=end($sizes);
-        foreach ($sizes as $sizestring) {
-            if ($this->size<1024) {
-                break;
-            }
-            if ($sizestring!=$lastsizestring) {
-                $this->size /= 1024;
-            }
-        }
-        if ($sizestring==$sizes[0]) {
-            $retstring='%01d %s';
-        } // Bytes aren't normally fractional
-        return sprintf($retstring,$this->size,$sizestring);
     }
 
     protected function afterDelete() {
