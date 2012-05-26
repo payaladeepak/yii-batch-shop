@@ -65,15 +65,15 @@ class FeedbacksController extends Controller {
     }
 
     public function actionApproveDisapprove() {
-        $this->_toggle($_GET['feedback_id']);
-        echo CHtml::ajaxButton(
-                ($_GET['approved']?'Disapprove':'Approve'),array('feedbacks/ApproveDisapprove'),array(
-            'data'=>"product_id={$_GET['product_id']}&approved=".($_GET['approved']==0?1:0),
-            'replace'=>'#button_'.$_GET['feedback_id']),array('id'=>'button_'.$_GET['feedback_id'],'style'=>'position: relative; left: 70%;'));
         if (Yii::app()->request->isAjaxRequest) {
-            // if AJAX request, we should not redirect the browser
-            if (!isset($_GET['ajax']))
-                $this->redirect(isset($_POST['returnUrl'])?$_POST['returnUrl']:'');
+        $newval=$this->_toggle($_GET['feedback_id']);
+        echo CHtml::ajaxButton(
+                ($newval?'Disapprove':'Approve'),
+                array('feedbacks/ApproveDisapprove'),
+                array(
+                        'data'=>"product_id={$_GET['product_id']}&approved=".($newval==0?1:0),
+                        'replace'=>'#button_'.$_GET['feedback_id']),
+                    array('id'=>'button_'.$_GET['feedback_id'],'style'=>'position: relative; left: 70%;'));
             Yii::app()->end();
         }
         else
@@ -84,7 +84,7 @@ class FeedbacksController extends Controller {
         $model=$this->loadModel($id);
         $model->$attribute=($model->$attribute==0)?1:0;
         $model->save(false);
-        return true;
+        return $model->$attribute;
     }
 
 }
