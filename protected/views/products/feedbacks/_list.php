@@ -5,11 +5,15 @@
 <?php endif;?>
 <?php
 $this->widget('zii.widgets.CListView',array(
-    'id' => '#foo',
+    'id'=>'#foo',
     'dataProvider'=>$dataProvider,
     'itemView'=>'feedbacks/_item',
     'viewData'=>array(
         'product_id'=>$product_id,
+    ),
+    'pager'=>array(
+        'class'=>'SeoLinkPager',
+        'cssFile'=>Yii::app()->baseUrl.'/css/'.'pager.css',
     )
 ));
 ?>
