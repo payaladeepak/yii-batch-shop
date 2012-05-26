@@ -175,8 +175,9 @@ class ProductsController extends Controller {
     public function actionDetails($id) {
         $this->loadModel($id);
         $feedbacks=new Feedbacks;
-        if (isset($_POST['Feedbacks'])) {
-            $feedbacks->attributes=$_POST['Feedbacks'];
+        $post=Yii::app()->request->getPost('Feedbacks');
+        if ($post!=false&&!Yii::app()->user->hasFlash('Feedbacks')) {
+            $feedbacks->attributes=$post;
             $feedbacks->date_added=time();
             $feedbacks->product_id=$id;
             if ($feedbacks->save()) {
@@ -188,8 +189,8 @@ class ProductsController extends Controller {
                         'A new feedback was received, you\'ll have to approve it to enable its display<br/>
                         <a href"'.Yii::app()->request->hostInfo.Yii::app()->request->requestUri.'">Click here</a> to quickly jump to the product page.'
                 );
-                Yii::app()->mailer->Send();
-                Yii::app()->user->setFlash('feedback','Your feedback was received, it will be visible once it is approved.');
+             //   Yii::app()->mailer->Send();
+                Yii::app()->user->setFlash('feedback','Your feedback was received, it will be shown once it is approved.');
                 $this->refresh(); 
             }
         }
@@ -207,6 +208,7 @@ class ProductsController extends Controller {
                     )
             ),
             'feedbacks'=>$feedbacks,
+            'product_id'=>$id,
         ));
     }
 

@@ -58,7 +58,10 @@ $this->widget('zii.widgets.grid.CGridView', array(
                 'name'=>'date_added',
                 'type'=>'datetime',
             ),
-            array('name'=>'menu_search','value'=>'$data->menu->name'),
+            array(
+                'name'=>'menu_search',
+                'value'=>'$data->menu->name',
+                ),
             array(
 		'class'=>'CButtonColumn',
                 'template'=>'{update}{delete}'

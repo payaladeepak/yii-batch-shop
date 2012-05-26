@@ -7,5 +7,8 @@
 $this->widget('zii.widgets.CListView',array(
     'dataProvider'=>$dataProvider,
     'itemView'=>'feedbacks/_item',
+    'viewData'=>array(
+        'product_id'=>$product_id,
+    )
 ));
 ?>

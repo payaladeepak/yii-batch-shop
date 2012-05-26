@@ -39,10 +39,7 @@
 
 .yiiTab div.view
 {
-	/*border-left:1px solid #D60C0C;
-	border-right:1px solid #D60C0C;
-	border-bottom:1px solid #D60C0C;*/
-	margin:0;
+	margin:3px;
 	padding:8px;
 }
 

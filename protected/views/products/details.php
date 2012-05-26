@@ -87,6 +87,7 @@ $this->widget('CTabView',array(
             'view'=>'feedbacks/_list',
             'data'=>array(
                 'dataProvider'=>$dataProvider,
+                'product_id'=>$product_id,
             ),
         ),
         'tab2'=>array(

@@ -1,7 +1,7 @@
 <?php
 class Feedbacks extends CActiveRecord
 {
-    public $verifyCode,$date_added,$product_id;
+    public $verifyCode,$date_added,$product_id,$related_product;
     public static function model($className = __CLASS__)
     {
         return parent::model($className);
@@ -45,8 +45,18 @@ class Feedbacks extends CActiveRecord
         $criteria->compare('nickname', $this->nickname, true);
         $criteria->compare('rating', $this->rating);
         $criteria->compare('approved', $this->approved);
+        $criteria->compare('product.title',$this->related_product,true);
         return new CActiveDataProvider($this, array(
-            'criteria' => $criteria
+            'criteria' => $criteria,
+            'sort'=>array(
+                        'attributes'=>array(
+                            'related_product'=>array(
+                                'asc'=>'product.title',
+                                'desc'=>'product.title DESC',
+                            ),
+                            '*',
+                        ),
+                    )
         ));
     }
 }
