@@ -5,6 +5,7 @@
 <?php endif;?>
 <?php
 $this->widget('zii.widgets.CListView',array(
+    'id' => '#foo',
     'dataProvider'=>$dataProvider,
     'itemView'=>'feedbacks/_item',
     'viewData'=>array(

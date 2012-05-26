@@ -73,7 +73,7 @@ class FeedbacksController extends Controller {
                 array(
                         'data'=>"product_id={$_GET['product_id']}&approved=".($newval==0?1:0),
                         'replace'=>'#button_'.$_GET['feedback_id']),
-                    array('id'=>'button_'.$_GET['feedback_id'],'style'=>'position: relative; left: 70%;'));
+                    array('id'=>'button_'.$_GET['feedback_id'],'style'=>'position: absolute; left: 85%;'));
             Yii::app()->end();
         }
         else

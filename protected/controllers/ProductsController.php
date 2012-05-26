@@ -176,7 +176,7 @@ class ProductsController extends Controller {
         $this->loadModel($id);
         $feedbacks=new Feedbacks;
         $post=Yii::app()->request->getPost('Feedbacks');
-        if ($post!=false&&!Yii::app()->user->hasFlash('Feedbacks')) {
+        if (!empty($post)&&!Yii::app()->user->hasFlash('feedback')) {
             $feedbacks->attributes=$post;
             $feedbacks->date_added=time();
             $feedbacks->product_id=$id;
@@ -189,9 +189,9 @@ class ProductsController extends Controller {
                         'A new feedback was received, you\'ll have to approve it to enable its display<br/>
                         <a href"'.Yii::app()->request->hostInfo.Yii::app()->request->requestUri.'">Click here</a> to quickly jump to the product page.'
                 );
-             //   Yii::app()->mailer->Send();
+            //    Yii::app()->mailer->Send();
                 Yii::app()->user->setFlash('feedback','Your feedback was received, it will be shown once it is approved.');
-                $this->refresh(); 
+                $this->refresh();
             }
         }
         $options=explode("\n",$this->model->options);
