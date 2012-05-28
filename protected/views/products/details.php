@@ -25,9 +25,11 @@
             }
         }
 });});');?>
-
-<?php Yii::app()->getClientScript()->registerScript('scrollToError','$(document).ready(function () {$.scrollTo(\'.errorSummary\',400);});');?>
-<?php Yii::app()->getClientScript()->registerScript('scrollToSuccess','$(document).ready(function () {$.scrollTo(\'.flash-success\',400);});');?>
+<?php Yii::app()->getClientScript()->registerScript('scrollTo','$(document).ready(function () {
+    if ($(\'.flash-success\').length > 0) {$.scrollTo(\'.flash-success\',400);}
+    if ($(\'.errorSummary\').length > 0) {$.scrollTo(\'.errorSummary\',400);}
+    });');?>
+<?php //Yii::app()->getClientScript()->registerScript('scrollToError','$(document).ready(function () {');?>
 <h1>Product : <?php echo $this->model->title; ?></h1>
 <table width="100%">
     <tbody>
