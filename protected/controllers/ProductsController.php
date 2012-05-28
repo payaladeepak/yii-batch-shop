@@ -176,7 +176,6 @@ class ProductsController extends Controller {
         $feedbacks=new Feedbacks;
         if (isset($_POST['Feedbacks'])) {
             $feedbacks->attributes=$_POST['Feedbacks'];
-        //    $feedbacks->setAttributes($_POST['Feedbacks']);
             $feedbacks->date_added=time();
             $feedbacks->product_id=$id;
             if ($feedbacks->save()) {
@@ -188,10 +187,8 @@ class ProductsController extends Controller {
                         'A new feedback was received, you\'ll have to approve it to enable its display<br/>
                         <a href"'.Yii::app()->request->hostInfo.Yii::app()->request->requestUri.'">Click here</a> to quickly jump to the product page.'
                 );
-            //    Yii::app()->mailer->Send();
+                Yii::app()->mailer->Send();
                 Yii::app()->user->setFlash('feedback','Your feedback was received, it will be shown once it is approved.');
-         //       $post=array();
-           //     unset($post);
                 $this->refresh();
             }
         }

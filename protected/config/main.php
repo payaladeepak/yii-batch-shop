@@ -29,7 +29,7 @@ return array(
             'password'=>'0000',
         ),
         'user'=>array(
-            'allowAutoLogin'=>true
+            'allowAutoLogin'=>true,
         ),
         'pager'=>array(
             'SeoLinkPager'
