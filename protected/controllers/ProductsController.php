@@ -2,7 +2,6 @@
 
 class ProductsController extends Controller {
 
-    public $defaultAction='random';
     public $thumbHeight,$thumbWidth,$imgDir,$thumbsDir,$uploadDir,$unzippedDir,$zip,$model;
 
     public function init() {
@@ -175,9 +174,9 @@ class ProductsController extends Controller {
     public function actionDetails($id) {
         $this->loadModel($id);
         $feedbacks=new Feedbacks;
-        $post=Yii::app()->request->getPost('Feedbacks');
-        if (!empty($post)&&!Yii::app()->user->hasFlash('feedback')) {
-            $feedbacks->attributes=$post;
+        if (isset($_POST['Feedbacks'])) {
+            $feedbacks->attributes=$_POST['Feedbacks'];
+        //    $feedbacks->setAttributes($_POST['Feedbacks']);
             $feedbacks->date_added=time();
             $feedbacks->product_id=$id;
             if ($feedbacks->save()) {
@@ -191,6 +190,8 @@ class ProductsController extends Controller {
                 );
             //    Yii::app()->mailer->Send();
                 Yii::app()->user->setFlash('feedback','Your feedback was received, it will be shown once it is approved.');
+         //       $post=array();
+           //     unset($post);
                 $this->refresh();
             }
         }
