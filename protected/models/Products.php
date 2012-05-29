@@ -68,7 +68,7 @@ class Products extends CActiveRecord {
     protected function afterDelete() {
         parent::afterDelete();
         // Remove related feedbacks
-        $models=Feedbacks::model()->findAll('`product_id`='.$this->id);
+        $models=Feedbacks::model()->findAll('',array(':product_id'=>$this->id));
         foreach ($models as $model) {
             $model->delete();
         }
