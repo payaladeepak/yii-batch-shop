@@ -1,8 +1,12 @@
 <div class="form">
     <?php
+    if ($this->model->getScenario()=='update')
+        $action=array('products/update','id'=>$this->model->id);
+    else
+        $action=array('products/add');
     $form=$this->beginWidget('CActiveForm',array(
         'id'=>'products-form',
-        'action'=>array('products/add'),
+        'action'=>$action,
         'enableAjaxValidation'=>false,
         'htmlOptions'=>array('enctype'=>'multipart/form-data'),
             ));
@@ -13,12 +17,12 @@
     <?php echo $form->errorSummary($this->model);?>
     <?php echo CHtml::hiddenField('activeTab','add');?>
     <div class="row">
-    <?php echo $form->labelEx($this->model,'title');?>
-    <?php if ($this->model->getScenario()!='update'):?>
-        <?php echo $form->fileField($this->model,'title',array('size'=>50));?>
-    <?php else:?>
-        <?php echo $form->textField($this->model,'title');?>
-    <?php endif;?>
+        <?php echo $form->labelEx($this->model,'title');?>
+        <?php if ($this->model->getScenario()=='update'):?>
+            <?php echo $form->textField($this->model,'title');?>
+        <?php else:?>
+            <?php echo $form->fileField($this->model,'title',array('size'=>50));?>
+        <?php endif;?>
     <?php echo $form->error($this->model,'title');?>
     </div>
 

@@ -59,7 +59,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
                 'type'=>'datetime',
             ),
             array(
-                'name'=>'menu_search',
+                'name'=>'related_menu',
                 'value'=>'$data->menu->name',
                 ),
             array(

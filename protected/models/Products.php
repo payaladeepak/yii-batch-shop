@@ -2,7 +2,7 @@
 
 class Products extends CActiveRecord {
 
-    public $options,$menu_search,$uploadDir;
+    public $options,$related_menu,$uploadDir;
 
     public static function model($className=__CLASS__) {
         return parent::model($className);
@@ -14,17 +14,17 @@ class Products extends CActiveRecord {
 
     public function rules() {
         return array(
-            array('title','file','on'=>'add','allowEmpty'=>false,'types'=>Yii::app()->params['allowedTypes'],'wrongType'=>'Wrong file type !','minSize'=>Yii::app()->params['minUploadSize'],'tooSmall'=>'File is too small !','maxSize'=>Yii::app()->params['maxUploadSize']),
-            array('title','uploaded','on'=>'batch-add'),
+            array('title','file','on'=>'form','allowEmpty'=>false,'types'=>Yii::app()->params['allowedTypes'],'wrongType'=>'Wrong file type !','minSize'=>Yii::app()->params['minUploadSize'],'tooSmall'=>'File is too small !','maxSize'=>Yii::app()->params['maxUploadSize']),
+            array('title','uploaded','on'=>'batch-form'),
             array('price, menu_id','numerical','integerOnly'=>true),
-            array('price,menu_id','required'),
+            array('price,menu_id','required','on'=>array('batch-form','form')),
             array('options,image_url,thumb_url,date_added','safe'),
-            array('title,menu_search','safe','on'=>'search'),
+            array('title,related_menu','safe','on'=>'search'),
             array('title,price,menu_id','required','on'=>'update'),
         );
     }
 
-    // if upload directory is empty, no file was uploaded (for batch additions mode)
+    // if upload directory is empty, no file was uploaded (at batch additions mode)
     public function uploaded() {
         $files=CFileHelper::findFiles($this->uploadDir);
         if (empty($files))
@@ -53,10 +53,10 @@ class Products extends CActiveRecord {
     public function search() {
         $criteria=new CDbCriteria;
         $criteria->compare('title',$this->title,true);
-        $criteria->compare('menu.name',$this->menu_search,true);
+        $criteria->compare('menu.name',$this->related_menu,true);
         return new CActiveDataProvider($this,array('criteria'=>$criteria,'sort'=>array(
                         'attributes'=>array(
-                            'menu_search'=>array(
+                            'related_menu'=>array(
                                 'asc'=>'menu.name',
                                 'desc'=>'menu.name DESC',
                             ),

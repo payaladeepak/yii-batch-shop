@@ -17,18 +17,18 @@ $this->menu=array(
 <?php else: ?>
     <?php $this->widget('CTabView',array(
     'cssFile'=>'/css/tabs.css',
-    'activeTab'=>(Yii::app()->request->isPostRequest&&$_POST['activeTab']=='batch-add'?'tab2':'tab1'),
+    'activeTab'=>(Yii::app()->request->isPostRequest&&$_POST['activeTab']=='batch-form'?'tab2':'tab1'),
     'tabs'=>array(
         'tab1'=>array(
             'title'=>'Add a product',
-            'view'=>'_add',
+            'view'=>'_form',
             'data'=>array(
                 'listData'=>$listData,
             ),
         ),
         'tab2'=>array(
             'title'=>'Batch additions',
-            'view'=>'_batch-add',
+            'view'=>'_batch-form',
             'data'=>array(
                 'listData'=>$listData,
             ),

@@ -11,8 +11,8 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($this->model,'menu_search'); ?>
-		<?php echo $form->textField($this->model,'menu_search'); ?>
+		<?php echo $form->label($this->model,'related_menu'); ?>
+		<?php echo $form->textField($this->model,'related_menu'); ?>
 	</div>
 
 	<div class="row buttons">

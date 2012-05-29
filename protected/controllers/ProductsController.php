@@ -45,7 +45,7 @@ class ProductsController extends Controller {
         $this->render('results',array('dataSet'=>$dataSet,));
     }
     public function actionAdd() {
-        $this->model=new Products('add');
+        $this->model=new Products('form');
         $this->model->options=Yii::app()->params['defaultOptions'];
         if (Yii::app()->request->isPostRequest) {
             $this->model->setAttributes($_POST['Products']);
@@ -76,7 +76,7 @@ class ProductsController extends Controller {
     }
     
     public function actionBatchAdd() {
-        $this->model=new Products('batch-add');
+        $this->model=new Products('batch-form');
         $this->model->options=Yii::app()->params['defaultOptions'];
         if (Yii::app()->request->isPostRequest) {
             $this->model->setAttributes($_POST['Products']);
@@ -99,14 +99,15 @@ class ProductsController extends Controller {
     }
     
     public function actionUpdate($id) {
-        $this->loadModel($id,'','update');
+        $this->loadModel($id);
+        $this->model->setScenario('update');
+        $this->model->setIsNewRecord(false);
         Yii::app()->session->add('item',$this->model->getAttribute('title'));
-        if (Yii::app()->request->getPost('Products')) {
+        if (Yii::app()->request->getPost('Products')!=false) {
             $this->model->setAttributes($_POST['Products']);
             if ($this->model->save())
                 $this->redirect(array('admin'));
         }
-        $this->model->setIsNewRecord(false);
         $this->render('update',array('listData'=>$this->_selectList()));
     }
 
@@ -139,15 +140,10 @@ class ProductsController extends Controller {
             throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
     }
 
-    protected function loadModel($id,$with=null,$scenario=null) {
-        if (!empty($with))
-            $this->model=Products::model()->with($with)->findByPk($id);
-        else
-            $this->model=Products::model()->findByPk($id);
+    protected function loadModel($id) {
+        $this->model=Products::model()->findByPk($id);
         if ($this->model===null)
-            throw new CHttpException(404,'The requested page does not exist.');
-        if (!empty($scenario))
-            $this->model->setScenario($scenario);
+            throw new CHttpException(404,'The requested page does not exist.');            
     }
 
     public function actionIndex($id) {
