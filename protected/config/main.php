@@ -4,17 +4,14 @@ return array(
     'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
     'name'=>'My company',
     'theme'=>'freearch',
-    /*
       'preload'=>array(
       'log'
       ),
-     */
     'import'=>array(
         'application.models.*',
         'application.components.*',
         'application.extensions.jtogglecolumn.*',
     ),
-    'modules'=>array(),
     'components'=>array(
         'mailer'=>array(
             'class'=>'ext.swiftMailer.SwiftMailer',
@@ -69,7 +66,7 @@ return array(
     ),
     'params'=>array(
         'minUploadSize'=>2048,//in bytes
-        'maxUploadSize'=>209715200,//in bytes
+        'maxUploadSize'=>67108864,//in bytes
         'allowedTypes'=>array('jpg','jpeg','png','gif'),
         'defaultOptions'=>'',
         'currencyCode'=>'USD',
