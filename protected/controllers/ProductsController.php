@@ -181,7 +181,7 @@ class ProductsController extends Controller {
                 Yii::app()->mailer->Subject=Yii::app()->name.' - A new feedback has been received';
                 Yii::app()->mailer->MsgHTML(
                         'A new feedback was received, you\'ll have to approve it to enable its display<br/>
-                        <a href"'.Yii::app()->request->hostInfo.Yii::app()->request->requestUri.'">Click here</a> to quickly jump to the product page.'
+                        <a href="'.Yii::app()->request->hostInfo.Yii::app()->request->requestUri.'">Click here</a> to quickly jump to the product page.'
                 );
                 Yii::app()->mailer->Send();
 				$feedbacks->save(false);
